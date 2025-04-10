@@ -1,0 +1,72 @@
+# === .NET (ASP.NET Core) ===
+bin/
+obj/
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vscode/
+*.code-workspace
+
+# Build results
+[Dd]ebug*/
+[Rr]elease*/
+x64/
+x86/
+*.dbmdl
+*.log
+*.pdb
+
+# NuGet packages
+*.nupkg
+# The packages folder can be ignored if you have `restore` enabled in your build pipeline
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# User secrets
+secrets.json
+
+# Configuration files
+appsettings.*.json
+appsettings.Development.json
+appsettings.Production.json
+
+# Dotnet watch
+*.dotnet-watch.json
+
+# === Node (React Frontend) ===
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+frontend/.env
+frontend/.next/
+frontend/.turbo/
+frontend/.parcel-cache/
+
+# Yarn / npm
+.yarn/
+.yarnrc
+.pnpm-debug.log
+npm-debug.log
+yarn-error.log
+
+# === Common ===
+.env
+*.sqlite
+*.sqlite3
+*.db
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
