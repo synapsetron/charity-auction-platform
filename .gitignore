@@ -9,6 +9,7 @@ obj/
 
 # Visual Studio
 .vscode/
+.vs/
 *.code-workspace
 .idea/
 # Build results
