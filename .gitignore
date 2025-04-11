@@ -7,11 +7,15 @@ obj/
 *.userosscache
 *.sln.docstates
 
+
+
 # Visual Studio
 .vscode/
 .vs/
 *.code-workspace
 .idea/
+.containers/
+.cursor/
 # Build results
 [Dd]ebug*/
 [Rr]elease*/
