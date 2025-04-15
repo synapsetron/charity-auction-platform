@@ -1,118 +1,75 @@
-import React from 'react'
-import { useLocation } from 'react-router-dom'
-import Container from './Container'
-import { PrimaryButton, ProfileCard, Title } from '../common/UIComponents'
+// src/components/layout/Footer.tsx
 
-function Footer() {
-  const location = useLocation()
-  const isHomePage = location.pathname === '/'
-
+import { Container, Row, Col } from 'react-bootstrap';
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaYoutube, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import logo from '../../assets/icons/hammer.png';
+const Footer = () => {
   return (
-    <footer className="relative bg-primary py-16 mt-16">
-      {isHomePage && (
-        <div className="bg-white w-full py-20 -mt-10 rounded-b-[40px] z-10 absolute top-0"></div>
-      )}
-
-      <Container className={`${isHomePage ? 'mt-32' : 'mt-0'} flex flex-col md:flex-row justify-between gap-12`}>
-        <div className="w-full md:w-1/3">
-          <img src="/images/logo-light.png" alt="Logo" />
-          <br />
-          <p className="text-gray-300">
-            Supporting charitable causes through auctions with transparency and impact.
-          </p>
-          <div className="bg-gray-300 h-[1px] my-8"></div>
-          <Title className="font-normal text-gray-100">Get The Latest Updates</Title>
-          <div className="flex items-center justify-between mt-5">
-            <input
-              type="text"
-              placeholder="Enter your email"
-              className="w-full h-full p-3.5 py-[15px] text-sm border-none outline-none rounded-l-md"
-            />
-            <PrimaryButton className="rounded-none py-3.5 px-8 text-sm hover:bg-indigo-800 rounded-r-md">
-              Submit
-            </PrimaryButton>
-          </div>
-          <p className="text-gray-300 text-sm mt-3">Email is safe. We don't spam.</p>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 w-full md:w-2/3">
-          <div>
-            <Title level={5} className="text-white font-normal">
-              Auction Categories
-            </Title>
-            <ul className="flex flex-col gap-5 mt-8 text-gray-200">
-              <li>Ending Now</li>
-              <li>Vehicles</li>
-              <li>Watches</li>
-              <li>Electronics</li>
-              <li>Real Estate</li>
-              <li>Jewelry</li>
-              <li>Art</li>
-              <li>Sports & Outdoor</li>
-            </ul>
-          </div>
-          <div>
-            <Title level={5} className="text-white font-normal">
-              About Us
-            </Title>
-            <ul className="flex flex-col gap-5 mt-8 text-gray-200">
-              <li>About Us</li>
-              <li>Help</li>
-              <li>Affiliates</li>
-              <li>Jobs</li>
-              <li>Press</li>
-              <li>Our blog</li>
-              <li>Collectors portal</li>
-            </ul>
-          </div>
-          <div>
-            <Title level={5} className="text-white font-normal">
-              We are Here to Help
-            </Title>
-            <ul className="flex flex-col gap-5 mt-8 text-gray-200">
-              <li>Your Account</li>
-              <li>Safe and Secure</li>
-              <li>Shipping Information</li>
-              <li>Contact Us</li>
-              <li>Help & FAQ</li>
-            </ul>
-          </div>
-          <div>
-            <Title level={5} className="text-white font-normal">
-              Follow Us
-            </Title>
-            <ul className="flex flex-col gap-5 mt-8 text-gray-200">
-              <li className="flex items-center gap-2">
-                <span>📞</span>
-                <span>(123) 456-7890</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span>📧</span>
-                <span>contact@charityauction.org</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span>📍</span>
-                <span>123 Charity Lane, City</span>
-              </li>
-            </ul>
-            <div className="flex items-center mt-5 justify-between">
-              <ProfileCard className="bg-white">
-                YouTube
-              </ProfileCard>
-              <ProfileCard className="bg-white">
-                Instagram
-              </ProfileCard>
-              <ProfileCard className="bg-white">
-                Twitter
-              </ProfileCard>
-              <ProfileCard className="bg-white">
-                LinkedIn
-              </ProfileCard>
+    <footer style={{ backgroundColor: '#11413a', color: 'white', paddingTop: '40px', paddingBottom: '40px' }}>
+      <Container>
+        <Row className="gy-4">
+          {/* Logo + description */}
+          <Col md={3}>
+            <div className="mb-3 d-flex align-items-center gap-2">
+              <img src={logo} alt="Logo" height="32" />
+              <h5 className="mb-0 fw-bold">ДоброBid</h5>
             </div>
-          </div>
-        </div>
+            <p>Created with the collaboration of over 60 of the world’s best Nuron Artists.</p>
+            <hr style={{ borderColor: 'rgba(255,255,255,0.2)' }} />
+            <h6>Get The Latest Nuron Updates</h6>
+          </Col>
+
+          {/* Auction Categories */}
+          <Col md={2}>
+            <h6 className="fw-bold mb-3">Auction Categories</h6>
+            <ul className="list-unstyled">
+              <li><Link to="/auctions/ending" className="text-white text-decoration-none">Ending Now</Link></li>
+              <li><Link to="/auctions/vehicles" className="text-white text-decoration-none">Vehicles</Link></li>
+              <li><Link to="/auctions/watches" className="text-white text-decoration-none">Watches</Link></li>
+              <li><Link to="/auctions/electronics" className="text-white text-decoration-none">Electronics</Link></li>
+            </ul>
+          </Col>
+
+          {/* About Us */}
+          <Col md={2}>
+            <h6 className="fw-bold mb-3">About Us</h6>
+            <ul className="list-unstyled">
+              <li><Link to="/about" className="text-white text-decoration-none">About Sbidu</Link></li>
+              <li><Link to="/help" className="text-white text-decoration-none">Help</Link></li>
+              <li><Link to="/affiliates" className="text-white text-decoration-none">Affiliates</Link></li>
+              <li><Link to="/jobs" className="text-white text-decoration-none">Jobs</Link></li>
+            </ul>
+          </Col>
+
+          {/* Help */}
+          <Col md={2}>
+            <h6 className="fw-bold mb-3">We are Here to Help</h6>
+            <ul className="list-unstyled">
+              <li><Link to="/account" className="text-white text-decoration-none">Your Account</Link></li>
+              <li><Link to="/security" className="text-white text-decoration-none">Safe and Secure</Link></li>
+              <li><Link to="/shipping" className="text-white text-decoration-none">Shipping Info</Link></li>
+              <li><Link to="/contact" className="text-white text-decoration-none">Contact Us</Link></li>
+            </ul>
+          </Col>
+
+          {/* Contacts + Socials */}
+          <Col md={3}>
+            <h6 className="fw-bold mb-3">Follow Us</h6>
+            <p><FaPhone className="me-2" /> (646) 968-0608</p>
+            <p><FaEnvelope className="me-2" /> help@engotheme.com</p>
+            <p><FaMapMarkerAlt className="me-2" /> 1201 Broadway Suite</p>
+            <div className="d-flex gap-3 mt-3">
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-white"><FaYoutube /></a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white"><FaInstagram /></a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white"><FaTwitter /></a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-white"><FaLinkedin /></a>
+            </div>
+          </Col>
+        </Row>
       </Container>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -1,72 +1,83 @@
+import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
-import CustomLink from "../common/СustomLink";
+import logo from '../../assets/icons/hammer.png';
 import { Link } from "react-router-dom";
-import { FaSearch } from "react-icons/fa"; // для іконки пошуку
+import { FaSearch } from "react-icons/fa";
 
 function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <Navbar
       expand="lg"
-      style={{ backgroundColor: "#11413a" }}
-      variant="dark"
       sticky="top"
+      style={{
+        transition: "background-color 0.3s, color 0.3s",
+        backgroundColor: isScrolled ? "#fff" : "#11413a",
+        color: isScrolled ? "#000" : "#fff"
+      }}
+      variant={isScrolled ? "light" : "dark"}
+      className={isScrolled ? "shadow-sm" : ""}
     >
       <Container fluid className="px-4">
-        {/* Logo + Site Name */}
         <Navbar.Brand
           as={Link}
           to="/"
           className="d-flex align-items-center gap-2"
         >
           <img
-            src="/logo.png" // встав сюди свій логотип або змінюй на placeholder
+            src={logo}
             alt="Logo"
             style={{ height: "32px" }}
           />
-          <span className="fw-bold">ДоброBid </span>
+          <span className="fw-bold" style={{ color: isScrolled ? "#000" : "#fff" }}>
+            ДоброBid
+          </span>
         </Navbar.Brand>
 
-        {/* Mobile Toggle */}
         <Navbar.Toggle aria-controls="main-navbar" />
 
-        {/* Navigation Links */}
         <Navbar.Collapse id="main-navbar" className="justify-content-between">
           <Nav className="gap-3">
-            <Nav.Link as={Link} to="/">
-              Home
-            </Nav.Link>
-            <Nav.Link as={Link} to="/product">
-              Product
-            </Nav.Link>
-            <Nav.Link as={Link} to="/blog">
-              Blog
-            </Nav.Link>
-            <Nav.Link as={Link} to="/about">
-              About
-            </Nav.Link>
-            <Nav.Link as={Link} to="/services">
-              Services
-            </Nav.Link>
-            <Nav.Link as={Link} to="/contact">
-              Contact
-            </Nav.Link>
+            {["Home", "Product", "Blog", "About", "Services", "Contact"].map((text) => (
+              <Nav.Link
+                as={Link}
+                to={`/${text.toLowerCase()}`}
+                key={text}
+                className={isScrolled ? "text-dark" : "text-white"}
+              >
+                {text}
+              </Nav.Link>
+            ))}
           </Nav>
 
-          {/* Right side: Search + Auth */}
           <div className="d-flex align-items-center gap-3">
-            <FaSearch style={{ color: "white", cursor: "pointer" }} />
+            <FaSearch style={{ color: isScrolled ? "black" : "white", cursor: "pointer" }} />
 
-            <Nav.Link as={Link} to="/login" className="text-white">
+            <Nav.Link
+              as={Link}
+              to="/login"
+              className={isScrolled ? "text-dark" : "text-white"}
+            >
               Sign in
             </Nav.Link>
 
-            <Button as="div" variant="light" className="rounded-pill px-4">
+            <Button as="div" variant={isScrolled ? "dark" : "light"} className="rounded-pill px-4">
               <Link
                 to="/register"
-                className="text-decoration-none text-dark d-block px-3 py-1"
+                className={`text-decoration-none d-block px-3 py-1 ${isScrolled ? "text-white" : "text-dark"}`}
               >
                 Join
               </Link>
