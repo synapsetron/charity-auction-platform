@@ -35,7 +35,7 @@ function Header() {
       sticky="top"
       style={{
         transition: "background-color 0.3s, color 0.3s",
-        backgroundColor: isScrolled ? "#fff" : "#11413a",
+        backgroundColor: isScrolled ? "#fff" : "#153738",
         color: isScrolled ? "#000" : "#fff"
       }}
       variant={isScrolled ? "light" : "dark"}

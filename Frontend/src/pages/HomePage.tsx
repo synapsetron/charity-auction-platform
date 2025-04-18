@@ -1,20 +1,28 @@
 import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
-import user1 from '../assets/images/army_photo__1.png';
-import user2 from '../assets/images/army_photo_2.png';
+import zsuBackground from '../assets/images/zsu-hero-background.png'; // новий фон
 import zsuSupport from '../assets/images/zsu_support.jpg';
-
 const HomePage = () => {
   return (
     <>
-      <div style={{ backgroundColor: '#11413a', color: 'white', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
+      {/* Головна секція з фоном */}
+      <div
+        className="position-relative"
+        style={{
+          background: `linear-gradient(to left, rgba(4, 25, 75, 0.8) 0%, rgba(17, 65, 58, 0.6) 35%, rgba(17, 65, 58, 0.3) 55%, rgba(17, 65, 58, 0) 70%), url(${zsuBackground}) center/cover no-repeat`,
+          color: 'white',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          overflow: 'hidden',
+        }}
+      >
         <Container className="py-5" style={{ fontSize: '1.3rem' }}>
-          <Row className="align-items-center justify-content-center text-center text-md-start position-relative">
-            <Col md={6} className="pe-md-5 position-relative" style={{ zIndex: 2 }}>
+          <Row className="align-items-center text-center text-md-start position-relative">
+            <Col md={6} className="pe-md-5" style={{ zIndex: 2 }}>
               <h1 className="fw-bold mb-4 display-4">Build, sell & collect digital items.</h1>
               <p className="mb-5">
-                Nulla facilisi. Maecenas ac tellus ut ligula interdum convallis. Nullam dapibus on erat in dolor posuere,
-                none hendrerit lectus ornare. Suspendisse sit amet turpis sagittis, ultrices dui et, aliquam urna.
+                Підтримай Збройні сили України через цифрові аукціони. Купуй унікальні лоти, допомагай разом!
               </p>
               <Form className="d-flex bg-white rounded-pill overflow-hidden px-4 py-3 align-items-center mx-auto mx-md-0" style={{ maxWidth: '600px' }}>
                 <FaSearch className="text-muted me-3 fs-5" />
@@ -25,11 +33,11 @@ const HomePage = () => {
               </Form>
               <div className="d-flex gap-5 justify-content-center justify-content-md-start mt-5">
                 <div className="text-center">
-                  <h4 className="fw-bold">842M</h4>
+                  <h4 className="fw-bold">82M+</h4>
                   <small>Total Product</small>
                 </div>
                 <div className="text-center">
-                  <h4 className="fw-bold">842M</h4>
+                  <h4 className="fw-bold">82M+</h4>
                   <small>Total Auction</small>
                 </div>
                 <div className="text-center">
@@ -39,27 +47,12 @@ const HomePage = () => {
               </div>
             </Col>
 
-            <Col md={6} className="text-center mt-5 mt-md-0 position-relative">
-              <div className="d-flex justify-content-center align-items-end gap-4 position-relative" style={{ marginLeft: '20rem', zIndex: 1 }}>
-                <img
-                  src={user1}
-                  alt="User 1"
-                  className="rounded"
-                  style={{ width: '600px', height: '800px', objectFit: 'cover', borderRadius: '50px', marginBottom: '40px' }}
-                />
-                <img
-                  src={user2}
-                  alt="User 2"
-                  className="rounded"
-                  style={{ width: '280px', height: '550px', objectFit: 'cover', borderRadius: '20px' }}
-                />
-              </div>
-            </Col>
+            {/* Праву частину (Col md={6}) видаляємо — фон сам справляється */}
           </Row>
         </Container>
       </div>
- 
-      {/* About Section */}
+
+      {/* Секція About */}
       <section style={{ backgroundColor: '#fff', color: '#000', padding: '6rem 0', fontSize: '1.2rem' }}>
         <Container>
           <Row className="align-items-center">
@@ -74,7 +67,7 @@ const HomePage = () => {
             <Col md={6}>
               <img src={zsuSupport} alt="Support Ukraine" className="img-fluid rounded shadow" />
             </Col>
-          </Row>
+          </Row>  
         </Container>
       </section>
 

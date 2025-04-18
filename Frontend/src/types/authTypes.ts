@@ -23,4 +23,11 @@ export interface UserRegisterDTO {
     updatedAt: string;
     accessToken?: string;
   }
+
+export interface UpdateUserProfileDTO {
+  firstName: string;
+  lastName: string;
+  oldPassword?: string;
+  newPassword?: string;
+}
   

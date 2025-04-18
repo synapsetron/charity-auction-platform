@@ -12,9 +12,11 @@ import ProfilePage from './pages/ProfilePage';
 import Dashboard from './components/profile/Dashboard';
 import ProfileLayout from './components/profile/ProfileLayout'; 
 import { AuthProvider } from './context/AuthContext';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const App = () => {
   return (
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}>
     <AuthProvider>
     <Router>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -45,6 +47,7 @@ const App = () => {
       </div>
     </Router>
     </AuthProvider>
+    </GoogleOAuthProvider>
   );
 };
 

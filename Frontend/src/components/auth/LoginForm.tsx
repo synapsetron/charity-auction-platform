@@ -2,8 +2,9 @@ import { Form, Button } from 'react-bootstrap';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { loginUser } from '../../api/auth';
+import { loginUser, googleLoginUser } from '../../api/auth'; // подключаем googleLoginUser
 import { useAuth } from '../../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google'; // добавляем GoogleLogin
 
 interface LoginFormProps {
   onForgotPassword: () => void;
@@ -24,8 +25,26 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
       setUser(loggedUser);
       navigate('/profile/dashboard');
     } catch (error: any) {
-      setErrorMessage(error.message || 'Помилка входу');
+      const backendMessage = error.response?.data?.message;
+      setErrorMessage(backendMessage || 'Помилка входу');
     }
+  };
+
+  const handleGoogleLoginSuccess = async (credentialResponse: any) => {
+    try {
+      if (credentialResponse.credential) {
+        const loggedUser = await googleLoginUser(credentialResponse.credential);
+        setUser(loggedUser);
+        navigate('/profile/dashboard');
+      }
+    } catch (error: any) {
+      const backendMessage = error.response?.data?.message;
+      setErrorMessage(backendMessage || 'Помилка входу через Google');
+    }
+  };
+
+  const handleGoogleLoginError = () => {
+    setErrorMessage('Помилка під час входу через Google');
   };
 
   return (
@@ -78,12 +97,15 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
       <div className="text-center border rounded p-3 mt-4">
         <h6 className="mb-3">АБО УВІЙТИ ЧЕРЕЗ</h6>
         <div className="d-flex justify-content-center gap-3">
-          <Button variant="danger" className="d-flex align-items-center gap-2">
-            <FaGoogle /> Google
-          </Button>
-          <Button variant="primary" className="d-flex align-items-center gap-2">
+          <GoogleLogin
+            onSuccess={handleGoogleLoginSuccess}
+            onError={handleGoogleLoginError}
+            useOneTap
+          />
+          {/* Фейсбук можно будет потом прикрутить */}
+          {/* <Button variant="primary" className="d-flex align-items-center gap-2">
             <FaFacebook /> Facebook
-          </Button>
+          </Button> */}
         </div>
       </div>
 
