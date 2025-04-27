@@ -1,43 +1,76 @@
 import axios from 'axios';
-import { UserLoginDTO, UserRegisterDTO, UserResponseDTO, UpdateUserProfileDTO } from '../types/authTypes';
+import {
+  UserLoginDTO,
+  UserRegisterDTO,
+  UserResponseDTO,
+  UpdateUserProfileDTO,
+  ResetPasswordResponseDTO,
+  ConfirmEmailRequestDTO,
+  RefreshTokenRequestDTO,
+  RevokeRefreshTokenResponseDTO
+} from '../types/authTypes';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
+const api = axios.create({
+  baseURL: `${API_URL}/api`,
+  withCredentials: true, // ⬅️ обязательно!
+});
+
+// Регистрация
 export const registerUser = async (data: UserRegisterDTO): Promise<UserResponseDTO> => {
-  const response = await axios.post(`${API_URL}/api/register`, data);
+  const response = await api.post('/register', data);
   return response.data;
 };
 
+// Логин
 export const loginUser = async (data: UserLoginDTO): Promise<UserResponseDTO> => {
-  const response = await axios.post(`${API_URL}/api/login`, data);
+  const response = await api.post('/login', data);
   return response.data;
 };
 
+// Логин через Google
 export const googleLoginUser = async (idToken: string): Promise<UserResponseDTO> => {
-  const response = await axios.post(`${API_URL}/api/login-google`, { idToken });
+  const response = await api.post('/login-google', { idToken });
   return response.data;
 };
 
-
-export const logoutUser = () => {
-  localStorage.removeItem('user');
-  document.cookie = 'accessToken=; Max-Age=0; path=/;';
+// Получение текущего пользователя
+export const getCurrentUser = async (): Promise<UserResponseDTO> => {
+  const response = await api.get('/current-user');
+  return response.data;
 };
 
+// Обновление профиля
 export const updateUserProfile = async (data: UpdateUserProfileDTO): Promise<UserResponseDTO> => {
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const accessToken = user.accessToken;
-
-  const response = await axios.put(`${API_URL}/api/user/update-profile`, data, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
-  return response.data; // возвращаем нового юзера
+  const response = await api.put('/user/update-profile', data);
+  return response.data;
 };
 
+// Выход из аккаунта
+export const logoutUser = async (): Promise<void> => {
+  await api.post('/logout');
+};
 
-export const resetPassword = async (email: string): Promise<void> => {
-  await axios.post(`${API_URL}/api/reset-password`, { email });
+// Сброс пароля
+export const resetPassword = async (email: string): Promise<ResetPasswordResponseDTO> => {
+  const response = await api.post('/reset-password', { email });
+  return response.data;
+};
+
+// Подтверждение почты
+export const confirmEmail = async (data: ConfirmEmailRequestDTO): Promise<void> => {
+  await api.post('/confirm-email', data);
+};
+
+// Обновить access токен через refresh
+export const refreshToken = async (data: RefreshTokenRequestDTO): Promise<UserResponseDTO> => {
+  const response = await api.post('/refresh-token', data);
+  return response.data;
+};
+
+// Отозвать refresh токен
+export const revokeRefreshToken = async (data: RefreshTokenRequestDTO): Promise<RevokeRefreshTokenResponseDTO> => {
+  const response = await api.post('/revoke-refresh-token', data);
+  return response.data;
 };

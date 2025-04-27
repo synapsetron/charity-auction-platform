@@ -22,13 +22,14 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
     e.preventDefault();
     try {
       const loggedUser = await loginUser({ email, password });
-      setUser(loggedUser);
+      setUser(loggedUser); // тут просто инфу сохраняем
       navigate('/profile/dashboard');
     } catch (error: any) {
       const backendMessage = error.response?.data?.message;
       setErrorMessage(backendMessage || 'Помилка входу');
     }
   };
+  
 
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
     try {

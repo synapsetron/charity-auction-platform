@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { UserResponseDTO } from '../types/authTypes';
+import { getCurrentUser, logoutUser } from '../api/auth'; // обязательно подтяни сюда новую функцию
 
 interface AuthContextType {
   user: UserResponseDTO | null;
@@ -12,18 +13,22 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<UserResponseDTO | null>(() => {
-    const storedUser = localStorage.getItem('user');
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  const [user, setUser] = useState<UserResponseDTO | null>(null);
 
   useEffect(() => {
-    if (user) {
-      localStorage.setItem('user', JSON.stringify(user));
-    } else {
-      localStorage.removeItem('user');
-    }
-  }, [user]);
+    const fetchUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error('Не удалось получить пользователя:', error);
+        setUser(null); // если ошибка 401 — обнуляем
+        await logoutUser(); // очищаем куки на всякий случай
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

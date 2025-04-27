@@ -4,7 +4,6 @@ import {
   Container,
   Row,
   Col,
-  Card,
   Button,
   Form,
   Tab,
@@ -13,16 +12,19 @@ import {
   Table,
 } from "react-bootstrap";
 import { AuctionResponseWithBidsDTO } from "../types/auctionTypes";
+import { donateBid } from "../api/bid";
 import { BidInfoDTO } from "../types/bidTypes";
 import { getAuctionById } from "../api/auction";
 import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
 import Countdown from "react-countdown";
+import { toast } from "react-toastify";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const AuctionDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [auction, setAuction] = useState<AuctionResponseWithBidsDTO | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>("123"); // заглушка пользователя
   const [bidAmount, setBidAmount] = useState<number>(0);
   const [key, setKey] = useState<string>("description");
   const connectionRef = useRef<HubConnection | null>(null);
@@ -93,8 +95,38 @@ const AuctionDetailsPage = () => {
     ? Math.max(...auction.bids.map(b => b.amount))
     : auction.startingPrice;
 
+  const highestBid = auction.bids.length > 0
+    ? Math.max(...auction.bids.map(b => b.amount))
+    : auction.startingPrice;
+
+  const winningBid = auction.bids.find(b => b.amount === highestBid);
+
+  const isWinner = winningBid?.userId === currentUserId;
+  const userBid = auction.bids.find(b => b.userId === currentUserId && !b.isDonated);
+  const canDonate = !isWinner && userBid;
+
+  const totalRaised = auction.bids.reduce((sum, bid) => sum + bid.amount, 0);
+
   const handleBidSubmit = () => {
-    alert(`Submitting bid: $${bidAmount}`);
+    toast.info(`Submitting bid: $${bidAmount}`, { position: "top-center" });
+  };
+
+  const handleDonateBid = async () => {
+    if (!userBid) return;
+    try {
+      await donateBid(userBid.id);
+      toast.success(`Thank you for donating your bid of $${userBid.amount}!`, { position: "top-center" });
+      setAuction(prev => {
+        if (!prev) return prev;
+        const updatedBids = prev.bids.map(b => 
+          b.id === userBid.id ? { ...b, isDonated: true } : b
+        );
+        return { ...prev, bids: updatedBids };
+      });
+    } catch (error) {
+      console.error("Failed to donate bid", error);
+      toast.error("Failed to donate your bid. Please try again.", { position: "top-center" });
+    }
   };
 
   return (
@@ -177,6 +209,24 @@ const AuctionDetailsPage = () => {
               Submit
             </Button>
           </Form>
+
+          {/* Кнопка пожертвования ставки */}
+          {auction.bids.length > 0 && new Date(auction.endTime) < new Date() && canDonate && (
+            <Button
+              variant="outline-success"
+              className="w-100 mt-3"
+              onClick={handleDonateBid}
+            >
+              Donate your Bid (${userBid?.amount})
+            </Button>
+          )}
+
+          {/* Общая сумма */}
+          <div className="bg-light p-3 rounded shadow-sm mt-4">
+            <h5 className="text-center">Total Raised:</h5>
+            <h4 className="text-success text-center">${totalRaised}</h4>
+          </div>
+
         </Col>
       </Row>
 

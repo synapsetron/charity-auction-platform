@@ -5,4 +5,5 @@ export interface BidInfoDTO {
     userId: string;
     userName: string;
     createdAt: string;
+    isDonated: boolean;
 }

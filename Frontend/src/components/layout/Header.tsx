@@ -1,27 +1,99 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
-import logo from '../../assets/icons/hammer.png';
+import Dropdown from "react-bootstrap/Dropdown";
 import { Link, useNavigate } from "react-router-dom";
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
+import { FaSearch, FaUserCircle, FaBell } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { logoutUser } from "../../api/auth";
+import logo from "../../assets/icons/hammer.png";
+
+type Notification = {
+  title: string;
+  message: string;
+  createdAt: string;
+};
+
+const API_URL = process.env.REACT_APP_BACKEND_URL; // как у тебя в AuctionDetailsPage
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
+  const connectionRef = useRef<HubConnection | null>(null);
+  const isMounted = useRef(true);
 
   useEffect(() => {
     const onScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    isMounted.current = true;
+
+    const setupNotifications = async () => {
+      if (!user) return;
+
+      try {
+        if (connectionRef.current) {
+          await connectionRef.current.stop();
+          connectionRef.current = null;
+        }
+
+        const newConnection = new HubConnectionBuilder()
+          .withUrl(`${API_URL}/auctionHub`, {
+            accessTokenFactory: () => localStorage.getItem('token') || ""
+          })
+          .withAutomaticReconnect()
+          .build();
+
+          newConnection.on("ReceiveNotification", (notification: Notification) => {
+            if (isMounted.current) {
+              setNotifications(prev => {
+                const alreadyExists = prev.some(n => 
+                  n.title === notification.title &&
+                  n.message === notification.message &&
+                  n.createdAt === notification.createdAt
+                );
+                
+                if (!alreadyExists) {
+                  return [...prev, notification];
+                } else {
+                  return prev;
+                }
+              });
+          
+              setUnreadCount(prev => prev + 1);
+            }
+          });
+
+        await newConnection.start();
+        if (isMounted.current) {
+          connectionRef.current = newConnection;
+        }
+      } catch (error) {
+        console.error("Error connecting to Notification Hub:", error);
+      }
+    };
+
+    setupNotifications();
+
+    return () => {
+      isMounted.current = false;
+      if (connectionRef.current) {
+        connectionRef.current.stop();
+        connectionRef.current = null;
+      }
+    };
+  }, [user]);
 
   const handleLogout = () => {
     logoutUser();
@@ -58,7 +130,6 @@ function Header() {
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-navbar" />
-
         <Navbar.Collapse id="main-navbar" className="justify-content-between">
           <Nav className="gap-3">
             {[
@@ -80,8 +151,54 @@ function Header() {
             ))}
           </Nav>
 
-          <div className="d-flex align-items-center gap-3">
+          <div className="d-flex align-items-center gap-3 position-relative">
             <FaSearch style={{ color: isScrolled ? "black" : "white", cursor: "pointer" }} />
+
+            {user && (
+              <Dropdown
+                align="end"
+                onToggle={(isOpen) => {
+                  if (isOpen) {
+                    setUnreadCount(0);
+                  }
+                }}
+              >
+                <Dropdown.Toggle
+                  variant="link"
+                  id="dropdown-notifications"
+                  style={{ color: isScrolled ? "black" : "white", position: "relative" }}
+                >
+                  <FaBell size={24} />
+                  {unreadCount > 0 && (
+                    <span style={{
+                      backgroundColor: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      fontSize: "10px",
+                      padding: "2px 6px",
+                      position: "absolute",
+                      top: "-5px",
+                      right: "-5px"
+                    }}>
+                      {unreadCount}
+                    </span>
+                  )}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu style={{ minWidth: "300px" }}>
+                  {notifications.length === 0 ? (
+                    <Dropdown.ItemText>No notifications</Dropdown.ItemText>
+                  ) : (
+                    notifications.map((n, idx) => (
+                      <Dropdown.Item key={idx}>
+                        <strong>{n.title}</strong>
+                        <div className="small text-muted">{n.message}</div>
+                      </Dropdown.Item>
+                    ))
+                  )}
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
 
             {user ? (
               <>
@@ -94,7 +211,7 @@ function Header() {
                   <span className={isScrolled ? "text-dark" : "text-white"}>{user.firstName}</span>
                 </Nav.Link>
                 <Button variant="danger" onClick={handleLogout} className="rounded-pill px-4">
-                  Вийти
+                  Logout
                 </Button>
               </>
             ) : (
