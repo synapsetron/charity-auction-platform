@@ -8,6 +8,10 @@ export const getAllAuctions = async (): Promise<AuctionResponseWithBidsDTO[]> =>
     const response = await axios.get(`${API_URL}/api/Auction/all`);
     return response.data;
 };
+export const getApprovedAuctions = async (): Promise<AuctionResponseWithBidsDTO[]> => {
+    const response = await axios.get(`${API_URL}/api/Auction/approved-auctions`);
+    return response.data;
+  };
 
 export const getAuctionById = async (auctionId: string): Promise<AuctionResponseWithBidsDTO> => {
     const response = await axios.get(`${API_URL}/api/Auction/${auctionId}`);

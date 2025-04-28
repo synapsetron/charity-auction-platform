@@ -1,21 +1,21 @@
 import { Container, Row, Col, Nav, Button, Card } from 'react-bootstrap';
 import { FaUserCircle } from 'react-icons/fa';
-import { MdDashboard } from 'react-icons/md';
+import { MdDashboard, MdOutlineCategory } from 'react-icons/md';
 import { CiMedal } from 'react-icons/ci';
 import { GiBarbedStar } from 'react-icons/gi';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'; // 
+import { useAuth } from '../../context/AuthContext';
 import { logoutUser } from '../../api/auth';
 
 const ProfileLayout = () => {
-    const { user, setUser } = useAuth(); // достаём юзера и функцию обновления
-    const navigate = useNavigate();
-  
-    const handleLogout = () => {
-      logoutUser();
-      setUser(null); // чистим пользователя из контекста
-      navigate('/login');
-    };
+  const { user, setUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logoutUser();
+    setUser(null);
+    navigate('/login');
+  };
 
   if (!user) {
     return (
@@ -48,6 +48,13 @@ const ProfileLayout = () => {
               <Nav.Link as={Link} to="/profile/personal" className="d-flex align-items-center gap-2 text-success fw-bold">
                 <FaUserCircle /> Personal Profile
               </Nav.Link>
+
+              {/* Для админа — ссылка на новую панель */}
+              {user?.role === 'admin' && (
+                <Nav.Link as={Link} to="/profile/admin-panel" className="d-flex align-items-center gap-2 text-danger fw-semibold">
+                  <MdOutlineCategory /> Admin Panel
+                </Nav.Link>
+              )}
             </Nav>
 
             <Button variant="danger" onClick={handleLogout} className="w-100 mt-auto">
@@ -56,7 +63,7 @@ const ProfileLayout = () => {
           </Card>
         </Col>
 
-        {/* Main content */}
+        {/* Main Content */}
         <Col md={9}>
           <Card className="p-4 shadow-sm" style={{ minHeight: '650px' }}>
             <Outlet />

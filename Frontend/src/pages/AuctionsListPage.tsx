@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { AuctionCard } from "../components/auction/AuctionCard";
 import { AuctionResponseWithBidsDTO } from "../types/auctionTypes";
-import { getAllAuctions } from "../api/auction";
+import { getApprovedAuctions } from "../api/auction";
 
 export const AuctionsListPage = () => {
     const [auctions, setAuctions] = useState<AuctionResponseWithBidsDTO[]>([]);
@@ -10,7 +10,7 @@ export const AuctionsListPage = () => {
     useEffect(() => {
         const fetchAuctions = async () => {
             try {
-                const response = await getAllAuctions();
+                const response = await getApprovedAuctions();
                 setAuctions(response);
             } catch (error) {
                 console.error("Error fetching auctions", error);
