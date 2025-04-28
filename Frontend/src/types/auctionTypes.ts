@@ -31,6 +31,8 @@ export interface AuctionResponseDTO {
     isActive: boolean;
     organizerId: string;
     createdAt: Date;
+    isApproved: boolean;
+    isSold: boolean;
 }
 
 export interface AuctionResponseWithBidsDTO extends AuctionResponseDTO {

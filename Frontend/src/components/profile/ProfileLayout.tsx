@@ -55,6 +55,16 @@ const ProfileLayout = () => {
                   <MdOutlineCategory /> Admin Panel
                 </Nav.Link>
               )}
+               {user?.role === 'seller' && (
+                <>
+                  <Nav.Link as={Link} to="/profile/my-products" className="d-flex align-items-center gap-2 text-primary fw-semibold">
+                    <MdOutlineCategory /> Мої товари
+                  </Nav.Link>
+                  <Nav.Link as={Link} to="/profile/add-product" className="d-flex align-items-center gap-2 text-primary fw-semibold">
+                    <MdOutlineCategory /> Створити товар
+                  </Nav.Link>
+                </>
+              )}
             </Nav>
 
             <Button variant="danger" onClick={handleLogout} className="w-100 mt-auto">

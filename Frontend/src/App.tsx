@@ -12,7 +12,9 @@ import ContactPage from './pages/ContactPage';
 import ProfilePage from './pages/ProfilePage';
 import Dashboard from './components/profile/Dashboard';
 import ProfileLayout from './components/profile/ProfileLayout';
+import MyProducts from './components/profile/MyProducts';
 import AdminPanel from './components/profile/AdminPanel';
+import CreateAuction from 'components/auction/CreateAuction';
 import { AuthProvider } from './context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -44,6 +46,8 @@ const App = () => {
                   <Route path="favorites" element={<div>Favorites Page</div>} />
                   <Route path="personal" element={<ProfilePage />} />
                   <Route path="/profile/admin-panel" element={<AdminPanel />} />
+                  <Route path="my-products" element={<MyProducts />} />
+                  <Route path="add-product" element={<CreateAuction />} />
                 </Route>
                 <Route path="*" element={<div>404 Not Found</div>} />
               </Routes>
