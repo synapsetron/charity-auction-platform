@@ -20,7 +20,7 @@ const UserManagement = () => {
 
   // Завантаження користувачів при завантаженні сторінки
   useEffect(() => {
-    if (user?.role === 'admin') {
+    if (user?.role === 'Admin') {
       fetchUsers();
     }
   }, [user]);
@@ -88,7 +88,7 @@ const UserManagement = () => {
   }
 
   // Якщо не адмін — заборона доступу
-  if (user?.role !== 'admin') {
+  if (user?.role !== 'Admin') {
     return (
       <Container className="py-5 text-center">
         <h3>У вас немає прав доступу</h3>

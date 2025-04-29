@@ -17,7 +17,7 @@ const ResetPasswordForm = ({ onBackToLogin }: ResetPasswordFormProps) => {
     setErrorMessage('');
 
     try {
-      await resetPassword(email);
+      await resetPassword({ email });
       setSuccessMessage('Лист з новим паролем відправлено на вашу пошту!');
     } catch (error: any) {
       setErrorMessage(error.message || 'Сталася помилка');

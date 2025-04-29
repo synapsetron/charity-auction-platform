@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { UserResponseDTO } from '../types/authTypes';
-import { getCurrentUser, logoutUser } from '../api/auth'; // обязательно подтяни сюда новую функцию
+import { createContext, useContext, useState, useEffect } from "react";
+import { UserResponseDTO } from "../types/authTypes";
+import { getCurrentUser, logoutUser } from "../api/auth"; // обязательно подтяни сюда новую функцию
 
 interface AuthContextType {
   user: UserResponseDTO | null;
@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
       } catch (error) {
-        console.error('Не удалось получить пользователя:', error);
+        console.error("Не удалось получить пользователя:", error);
         setUser(null); // если ошибка 401 — обнуляем
         await logoutUser(); // очищаем куки на всякий случай
       }

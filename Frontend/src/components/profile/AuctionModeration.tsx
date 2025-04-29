@@ -1,7 +1,19 @@
-import { useEffect, useState } from 'react';
-import { Container, Table, Button, Spinner, Modal, Form } from 'react-bootstrap';
-import { getPendingAuctions, approveAuction, rejectAuction, deleteAuction } from '../../api/adminApi';
-import { useAuth } from '../../context/AuthContext';
+import { useEffect, useState } from "react";
+import {
+  Container,
+  Table,
+  Button,
+  Spinner,
+  Modal,
+  Form,
+} from "react-bootstrap";
+import {
+  getPendingAuctions,
+  approveAuction,
+  rejectAuction,
+  deleteAuction,
+} from "../../api/adminApi";
+import { useAuth } from "../../context/AuthContext";
 
 interface Auction {
   id: string;
@@ -20,11 +32,13 @@ const AuctionModeration = () => {
   const [loading, setLoading] = useState(true);
 
   const [showRejectModal, setShowRejectModal] = useState(false);
-  const [rejectReason, setRejectReason] = useState('');
-  const [selectedAuctionId, setSelectedAuctionId] = useState<string | null>(null);
+  const [rejectReason, setRejectReason] = useState("");
+  const [selectedAuctionId, setSelectedAuctionId] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
-    if (user?.role === 'admin') {
+    if (user?.role === "Admin") {
       fetchAuctions();
     }
   }, [user]);
@@ -34,7 +48,7 @@ const AuctionModeration = () => {
       const data = await getPendingAuctions();
       setAuctions(data);
     } catch (error) {
-      console.error('Помилка завантаження аукціонів', error);
+      console.error("Помилка завантаження аукціонів", error);
     } finally {
       setLoading(false);
     }
@@ -47,7 +61,7 @@ const AuctionModeration = () => {
 
   const handleOpenRejectModal = (id: string) => {
     setSelectedAuctionId(id);
-    setRejectReason('');
+    setRejectReason("");
     setShowRejectModal(true);
   };
 
@@ -60,7 +74,7 @@ const AuctionModeration = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Ви впевнені, що хочете видалити аукціон?')) {
+    if (window.confirm("Ви впевнені, що хочете видалити аукціон?")) {
       await deleteAuction(id);
       await fetchAuctions();
     }
@@ -74,7 +88,7 @@ const AuctionModeration = () => {
     );
   }
 
-  if (user?.role !== 'admin') {
+  if (user?.role !== "Admin") {
     return (
       <Container className="py-5 text-center">
         <h3>У вас немає прав доступу</h3>
@@ -103,9 +117,27 @@ const AuctionModeration = () => {
               <td>{new Date(auction.startTime).toLocaleString()}</td>
               <td>{new Date(auction.endTime).toLocaleString()}</td>
               <td className="d-flex gap-2">
-                <Button size="sm" variant="success" onClick={() => handleApprove(auction.id)}>Підтвердити</Button>
-                <Button size="sm" variant="warning" onClick={() => handleOpenRejectModal(auction.id)}>Відмовити</Button>
-                <Button size="sm" variant="danger" onClick={() => handleDelete(auction.id)}>Видалити</Button>
+                <Button
+                  size="sm"
+                  variant="success"
+                  onClick={() => handleApprove(auction.id)}
+                >
+                  Підтвердити
+                </Button>
+                <Button
+                  size="sm"
+                  variant="warning"
+                  onClick={() => handleOpenRejectModal(auction.id)}
+                >
+                  Відмовити
+                </Button>
+                <Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() => handleDelete(auction.id)}
+                >
+                  Видалити
+                </Button>
               </td>
             </tr>
           ))}
@@ -113,7 +145,11 @@ const AuctionModeration = () => {
       </Table>
 
       {/* Reject Reason Modal */}
-      <Modal show={showRejectModal} onHide={() => setShowRejectModal(false)} centered>
+      <Modal
+        show={showRejectModal}
+        onHide={() => setShowRejectModal(false)}
+        centered
+      >
         <Modal.Header closeButton>
           <Modal.Title>Відмовити аукціон</Modal.Title>
         </Modal.Header>
@@ -135,7 +171,11 @@ const AuctionModeration = () => {
           <Button variant="secondary" onClick={() => setShowRejectModal(false)}>
             Скасувати
           </Button>
-          <Button variant="warning" onClick={handleConfirmReject} disabled={!rejectReason.trim()}>
+          <Button
+            variant="warning"
+            onClick={handleConfirmReject}
+            disabled={!rejectReason.trim()}
+          >
             Відмовити
           </Button>
         </Modal.Footer>

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Container, Table, Button, Spinner } from 'react-bootstrap';
-import { getAllAuctions, deleteAuction } from '../../api/adminApi'; // добавь если нужно правильные методы
-import { blockAuction, unblockAuction } from '../../api/adminApi'; // если блокировать/разблокировать
-import { AuctionResponseDTO } from '../../types/auctionTypes'; // твой тип аукциона
+import { useEffect, useState } from "react";
+import { Container, Table, Button, Spinner } from "react-bootstrap";
+import { getAllAuctions} from "../../api/auction"; // добавь если нужно правильные методы
+import { blockAuction,deleteAuction, unblockAuction } from "../../api/adminApi"; // если блокировать/разблокировать
+import { AuctionResponseDTO } from "../../types/auctionTypes"; // твой тип аукциона
 
 const AllAuctionsManagement = () => {
   const [auctions, setAuctions] = useState<AuctionResponseDTO[]>([]);
@@ -17,14 +17,14 @@ const AllAuctionsManagement = () => {
       const data = await getAllAuctions(); // здесь API для получения всех аукционов
       setAuctions(data);
     } catch (error) {
-      console.error('Помилка завантаження аукціонів', error);
+      console.error("Помилка завантаження аукціонів", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Ви впевнені, що хочете видалити аукціон?')) {
+    if (window.confirm("Ви впевнені, що хочете видалити аукціон?")) {
       await deleteAuction(id);
       await fetchAuctions();
     }
@@ -81,12 +81,18 @@ const AllAuctionsManagement = () => {
                 </Button>
                 <Button
                   size="sm"
-                  variant={auction.isActive ? 'warning' : 'success'}
-                  onClick={() => handleToggleBlock(auction.id, auction.isActive)}
+                  variant={auction.isActive ? "warning" : "success"}
+                  onClick={() =>
+                    handleToggleBlock(auction.id, auction.isActive)
+                  }
                 >
-                  {auction.isActive ? 'Блокувати' : 'Розблокувати'}
+                  {auction.isActive ? "Блокувати" : "Розблокувати"}
                 </Button>
-                <Button size="sm" variant="danger" onClick={() => handleDelete(auction.id)}>
+                <Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() => handleDelete(auction.id)}
+                >
                   Видалити
                 </Button>
               </td>

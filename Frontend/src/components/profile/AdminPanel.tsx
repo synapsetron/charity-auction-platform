@@ -1,16 +1,19 @@
-import { useState } from 'react';
-import { Container, Tab, Nav } from 'react-bootstrap';
-import AuctionModeration from './AuctionModeration';
-import AllAuctionsManagement from './AllAuctionsManagement';
-import UserManagement from './UserManagement';
+import { useState } from "react";
+import { Container, Tab, Nav } from "react-bootstrap";
+import AuctionModeration from "./AuctionModeration";
+import AllAuctionsManagement from "./AllAuctionsManagement";
+import UserManagement from "./UserManagement";
 
 const AdminPanel = () => {
-  const [key, setKey] = useState('moderation');
+  const [key, setKey] = useState("moderation");
 
   return (
     <Container className="py-4">
       <h3 className="mb-4">Панель адміністратора</h3>
-      <Tab.Container activeKey={key} onSelect={(k) => setKey(k || 'moderation')}>
+      <Tab.Container
+        activeKey={key}
+        onSelect={(k) => setKey(k || "moderation")}
+      >
         {/* Тепер вкладки ГОРИЗОНТАЛЬНО */}
         <Nav variant="tabs" className="mb-4">
           <Nav.Item>

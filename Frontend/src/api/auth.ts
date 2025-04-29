@@ -4,44 +4,46 @@ import {
   UserRegisterDTO,
   UserResponseDTO,
   UpdateUserProfileDTO,
+  ResetPasswordRequestDTO,
   ResetPasswordResponseDTO,
   ConfirmEmailRequestDTO,
   RefreshTokenRequestDTO,
-  RevokeRefreshTokenResponseDTO
+  RevokeRefreshTokenResponseDTO,
+  CurrentUserResponseDTO,
 } from '../types/authTypes';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const api = axios.create({
-  baseURL: `${API_URL}/api`,
-  withCredentials: true, // ⬅️ обязательно!
+  baseURL: `${API_URL}/api/v1/auth`,
+  withCredentials: true,
 });
 
-// Регистрация
+// Регистрация нового пользователя
 export const registerUser = async (data: UserRegisterDTO): Promise<UserResponseDTO> => {
   const response = await api.post('/register', data);
   return response.data;
 };
 
-// Логин
+// Логин пользователя
 export const loginUser = async (data: UserLoginDTO): Promise<UserResponseDTO> => {
   const response = await api.post('/login', data);
   return response.data;
 };
 
-// Логин через Google
+// Логин через Google OAuth
 export const googleLoginUser = async (idToken: string): Promise<UserResponseDTO> => {
   const response = await api.post('/login-google', { idToken });
   return response.data;
 };
 
-// Получение текущего пользователя
-export const getCurrentUser = async (): Promise<UserResponseDTO> => {
+// Получить данные текущего пользователя
+export const getCurrentUser = async (): Promise<CurrentUserResponseDTO> => {
   const response = await api.get('/current-user');
   return response.data;
 };
 
-// Обновление профиля
+// Обновить профиль текущего пользователя
 export const updateUserProfile = async (data: UpdateUserProfileDTO): Promise<UserResponseDTO> => {
   const response = await api.put('/user/update-profile', data);
   return response.data;
@@ -53,23 +55,23 @@ export const logoutUser = async (): Promise<void> => {
 };
 
 // Сброс пароля
-export const resetPassword = async (email: string): Promise<ResetPasswordResponseDTO> => {
-  const response = await api.post('/reset-password', { email });
+export const resetPassword = async (data: ResetPasswordRequestDTO): Promise<ResetPasswordResponseDTO> => {
+  const response = await api.post('/reset-password', data);
   return response.data;
 };
 
-// Подтверждение почты
+// Подтверждение email
 export const confirmEmail = async (data: ConfirmEmailRequestDTO): Promise<void> => {
   await api.post('/confirm-email', data);
 };
 
-// Обновить access токен через refresh
-export const refreshToken = async (data: RefreshTokenRequestDTO): Promise<UserResponseDTO> => {
+// Обновление access токена через refresh token
+export const refreshToken = async (data: RefreshTokenRequestDTO): Promise<CurrentUserResponseDTO> => {
   const response = await api.post('/refresh-token', data);
   return response.data;
 };
 
-// Отозвать refresh токен
+// Отзыв refresh токена
 export const revokeRefreshToken = async (data: RefreshTokenRequestDTO): Promise<RevokeRefreshTokenResponseDTO> => {
   const response = await api.post('/revoke-refresh-token', data);
   return response.data;
