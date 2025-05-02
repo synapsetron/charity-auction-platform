@@ -19,6 +19,7 @@ export interface BidInfoDTO {
     isDonated: boolean;
     isWinner: boolean;
     isAuctionActive: boolean;
+    isAuctionSold: boolean;
   }
   
   export interface BidResponseDTO {

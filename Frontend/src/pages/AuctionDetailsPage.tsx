@@ -45,6 +45,14 @@ const AuctionDetailsPage = () => {
   };
 
   useEffect(() => {
+    const interval = setInterval(() => {
+      refreshAuction();
+    }, 10000); // каждые 10 сек
+  
+    return () => clearInterval(interval);
+  }, []);
+  
+  useEffect(() => {
     isMounted.current = true;
 
     const setupAuctionPage = async () => {

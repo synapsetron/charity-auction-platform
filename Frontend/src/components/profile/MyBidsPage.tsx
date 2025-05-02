@@ -60,12 +60,21 @@ const MyBidsPage: React.FC = () => {
                   <p className="mb-1">
                     Дата ставки: {new Date(bid.createdAt).toLocaleString()}
                   </p>
-                  <p>
+                  <p className="mb-1">
                     Статус:{" "}
                     {bid.isAuctionActive ? (
                       <Badge bg="warning">Очікує завершення</Badge>
                     ) : bid.isWinner ? (
-                      <Badge bg="success">Виграв</Badge>
+                      <>
+                        <Badge bg="success" className="me-1">
+                          Виграв
+                        </Badge>
+                        {bid.isAuctionSold ? (
+                          <Badge bg="info">Оплачено</Badge>
+                        ) : (
+                          <Badge bg="danger">Неоплачено</Badge>
+                        )}
+                      </>
                     ) : (
                       <Badge bg="secondary">Програв</Badge>
                     )}
@@ -81,9 +90,11 @@ const MyBidsPage: React.FC = () => {
                   </Link>
 
                   {bid.isWinner ? (
-                    <Button variant="success" size="sm">
-                      Оплатити
-                    </Button>
+                    !bid.isAuctionSold ? (
+                      <Button variant="success" size="sm">
+                        Оплатити
+                      </Button>
+                    ) : null
                   ) : bid.isDonated ? (
                     <Badge bg="info">Донат підтверджено</Badge>
                   ) : (
