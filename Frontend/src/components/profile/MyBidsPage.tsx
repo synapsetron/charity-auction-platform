@@ -62,7 +62,9 @@ const MyBidsPage: React.FC = () => {
                   </p>
                   <p>
                     Статус:{" "}
-                    {bid.isWinner ? (
+                    {bid.isAuctionActive ? (
+                      <Badge bg="warning">Очікує завершення</Badge>
+                    ) : bid.isWinner ? (
                       <Badge bg="success">Виграв</Badge>
                     ) : (
                       <Badge bg="secondary">Програв</Badge>

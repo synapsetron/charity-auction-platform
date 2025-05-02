@@ -56,7 +56,6 @@ const MyProducts = () => {
     <Container className="py-4">
       <h4>Мої товари</h4>
 
-      {/* Таблиця аукціонів */}
       <div style={{ overflowX: "auto", maxHeight: "600px" }}>
         <Table bordered hover responsive className="align-middle">
           <thead className="table-light">
@@ -69,6 +68,7 @@ const MyProducts = () => {
               <th>Зображення</th>
               <th>Перевірено</th>
               <th>Продано</th>
+              <th>Статус</th>
               <th>Дії</th>
             </tr>
           </thead>
@@ -94,6 +94,13 @@ const MyProducts = () => {
                 <td>{auction.isApproved ? "Так" : "Ні"}</td>
                 <td>{auction.isSold ? "Так" : "Ні"}</td>
                 <td>
+                  {auction.isActive ? (
+                    <span className="text-success fw-semibold">Активний</span>
+                  ) : (
+                    <span className="text-muted fw-semibold">Завершений</span>
+                  )}
+                </td>
+                <td>
                   <ButtonGroup size="sm">
                     <Button
                       variant="primary"
@@ -104,6 +111,7 @@ const MyProducts = () => {
                     <Button
                       variant="warning"
                       onClick={() => handleEditAuction(auction.id)}
+                      disabled={!auction.isActive}
                     >
                       Редагувати
                     </Button>
@@ -115,7 +123,6 @@ const MyProducts = () => {
         </Table>
       </div>
 
-      {/* Вбудована форма редагування */}
       {editAuctionId && (
         <Card className="mt-4 shadow-sm">
           <Card.Header className="d-flex justify-content-between align-items-center">
@@ -124,7 +131,8 @@ const MyProducts = () => {
               variant="outline-danger"
               size="sm"
               onClick={handleCloseEdit}
-            > Закрити
+            >
+              Закрити
             </Button>
           </Card.Header>
           <Card.Body>

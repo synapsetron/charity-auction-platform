@@ -49,11 +49,12 @@ function Header() {
         }
 
         const newConnection = new HubConnectionBuilder()
-          .withUrl(`${API_URL}/auctionHub`, {
-            accessTokenFactory: () => localStorage.getItem('token') || ""
-          })
-          .withAutomaticReconnect()
-          .build();
+        .withUrl(`${API_URL}/auctionHub`, {
+          withCredentials: true
+        })
+        .withAutomaticReconnect()
+        .build();
+      
 
           newConnection.on("ReceiveNotification", (notification: Notification) => {
             if (isMounted.current) {

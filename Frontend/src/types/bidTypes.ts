@@ -6,9 +6,9 @@ export interface BidInfoDTO {
     userName: string;
     createdAt: string;
     isDonated: boolean;
-}
-
-export interface BidResponseWithWinnerDTO {
+  }
+  
+  export interface BidResponseWithWinnerDTO {
     id: string;
     amount: number;
     auctionId: string;
@@ -18,5 +18,22 @@ export interface BidResponseWithWinnerDTO {
     createdAt: string;
     isDonated: boolean;
     isWinner: boolean;
+    isAuctionActive: boolean;
+  }
+  
+  export interface BidResponseDTO {
+    id: string;
+    amount: number;
+    auctionId: string;
+    userId: string;
+    userName: string;
+    createdAt: string;
+    isDonated: boolean;
+    auctionName: string;
+  }
+  
+  export interface CreateBidRequestDTO {
+    auctionId: string;
+    amount: number;
   }
   
