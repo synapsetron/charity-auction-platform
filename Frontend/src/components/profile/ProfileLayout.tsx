@@ -53,31 +53,30 @@ const ProfileLayout = () => {
                 to="/profile/winning-bids"
                 className="d-flex align-items-center gap-2 text-dark fw-semibold"
               >
-                <CiMedal /> Winning Bids
+                <CiMedal /> Мої ставки
               </Nav.Link>
               <Nav.Link
                 as={Link}
                 to="/profile/favorites"
                 className="d-flex align-items-center gap-2 text-dark fw-semibold"
               >
-                <GiBarbedStar /> My Favorites
+                <GiBarbedStar /> Улюблені
               </Nav.Link>
               <Nav.Link
                 as={Link}
                 to="/profile/personal"
                 className="d-flex align-items-center gap-2 text-success fw-bold"
               >
-                <FaUserCircle /> Personal Profile
+                <FaUserCircle /> Профіль
               </Nav.Link>
 
-              {/* Для админа — ссылка на новую панель */}
               {user?.role === "Admin" && (
                 <Nav.Link
                   as={Link}
                   to="/profile/admin-panel"
                   className="d-flex align-items-center gap-2 text-danger fw-semibold"
                 >
-                  <MdOutlineCategory /> Admin Panel
+                  <MdOutlineCategory /> Панель Адміністратора
                 </Nav.Link>
               )}
               {user?.role === "Seller" && (
@@ -94,7 +93,7 @@ const ProfileLayout = () => {
                     to="/profile/add-product"
                     className="d-flex align-items-center gap-2 text-primary fw-semibold"
                   >
-                    <MdOutlineCategory /> Створити товар
+                    <MdOutlineCategory /> Додати товар
                   </Nav.Link>
                 </>
               )}
@@ -105,7 +104,7 @@ const ProfileLayout = () => {
               onClick={handleLogout}
               className="w-100 mt-auto"
             >
-              Log Out
+              Вийти
             </Button>
           </Card>
         </Col>

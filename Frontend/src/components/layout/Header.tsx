@@ -134,7 +134,7 @@ function Header() {
           <Nav className="gap-3">
             {[
               { text: "Home", link: "/home" },
-              { text: "Product", link: "/product" },
+              { text: "Auctions", link: "/auctions" },
               { text: "Blog", link: "/blog" },
               { text: "About", link: "/about" },
               { text: "Services", link: "/services" },

@@ -15,6 +15,7 @@ import { AuctionResponseWithBidsDTO } from "../types/auctionTypes";
 import { donateBid } from "../api/bid";
 import { BidInfoDTO } from "../types/bidTypes";
 import { getAuctionById } from "../api/auction";
+import { getCurrentUser } from "../api/auth";
 import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
 import Countdown from "react-countdown";
 import { toast } from "react-toastify";
@@ -22,13 +23,24 @@ import { toast } from "react-toastify";
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const AuctionDetailsPage = () => {
+  const [hasEnded, setHasEnded] = useState(false);
   const { id } = useParams<{ id: string }>();
   const [auction, setAuction] = useState<AuctionResponseWithBidsDTO | null>(null);
-  const [currentUserId, setCurrentUserId] = useState<string | null>("123"); // заглушка пользователя
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [bidAmount, setBidAmount] = useState<number>(0);
   const [key, setKey] = useState<string>("description");
   const connectionRef = useRef<HubConnection | null>(null);
   const isMounted = useRef(true);
+
+  const refreshAuction = async () => {
+    if (!id) return;
+    try {
+      const updatedAuction = await getAuctionById(id);
+      setAuction(updatedAuction);
+    } catch (error) {
+      console.error("Failed to refresh auction:", error);
+    }
+  };
 
   useEffect(() => {
     isMounted.current = true;
@@ -37,6 +49,9 @@ const AuctionDetailsPage = () => {
       if (!id) return;
 
       try {
+        const user = await getCurrentUser();
+        setCurrentUserId(user.id);
+
         const auctionData = await getAuctionById(id);
         if (isMounted.current) {
           setAuction(auctionData);
@@ -87,7 +102,7 @@ const AuctionDetailsPage = () => {
     };
   }, [id]);
 
-  if (!auction) {
+  if (!auction || !currentUserId) {
     return <Container className="py-5 text-center">Loading...</Container>;
   }
 
@@ -100,11 +115,9 @@ const AuctionDetailsPage = () => {
     : auction.startingPrice;
 
   const winningBid = auction.bids.find(b => b.amount === highestBid);
-
   const isWinner = winningBid?.userId === currentUserId;
   const userBid = auction.bids.find(b => b.userId === currentUserId && !b.isDonated);
   const canDonate = !isWinner && userBid;
-
   const totalRaised = auction.bids.reduce((sum, bid) => sum + bid.amount, 0);
 
   const handleBidSubmit = () => {
@@ -118,7 +131,7 @@ const AuctionDetailsPage = () => {
       toast.success(`Thank you for donating your bid of $${userBid.amount}!`, { position: "top-center" });
       setAuction(prev => {
         if (!prev) return prev;
-        const updatedBids = prev.bids.map(b => 
+        const updatedBids = prev.bids.map(b =>
           b.id === userBid.id ? { ...b, isDonated: true } : b
         );
         return { ...prev, bids: updatedBids };
@@ -129,11 +142,31 @@ const AuctionDetailsPage = () => {
     }
   };
 
+  const handlePayment = async () => {
+    const response = await fetch(`${API_URL}/api/payment/liqpay`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: currentUserId,
+        auctionId: auction.id,
+        amount: winningBid?.amount,
+        currency: "UAH",
+        description: `Payment for auction '${auction.title}'`
+      })
+    });
+    const html = await response.text();
+    const win = window.open("", "_blank");
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+    }
+  };
+
   return (
     <Container className="py-5">
       <Row className="mb-5 align-items-center">
         <Col md={6}>
-          <div className="p-3 bg-white rounded shadow-sm">
+          <div className="p-3 bg-white rounded shadow-sm" style={{ position: "relative" }}>
             <img
               src={auction.imageUrl}
               alt={auction.title}
@@ -142,8 +175,23 @@ const AuctionDetailsPage = () => {
                 height: "550px",
                 objectFit: "contain",
                 borderRadius: "10px",
+                opacity: !auction.isActive ? 0.5 : 1,
               }}
             />
+            {!auction.isActive && isWinner && !auction.isSold && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  fontSize: "48px",
+                  color: "#28a745",
+                }}
+              >
+                🔒
+              </div>
+            )}
           </div>
         </Col>
         <Col md={6}>
@@ -163,6 +211,10 @@ const AuctionDetailsPage = () => {
             <h5 className="text-center mb-3 fw-semibold">Time left</h5>
             <Countdown
               date={new Date(auction.endTime)}
+              onComplete={() => {
+                setHasEnded(true);
+                refreshAuction();
+              }}
               renderer={({ days, hours, minutes, seconds, completed }) => {
                 if (completed) {
                   return <h4 className="text-danger text-center">Auction Ended</h4>;
@@ -196,40 +248,56 @@ const AuctionDetailsPage = () => {
             </div>
           </div>
 
-          <Form className="d-flex" onSubmit={(e) => { e.preventDefault(); handleBidSubmit(); }}>
-            <Form.Control
-              type="number"
-              min={currentBid + 1}
-              value={bidAmount}
-              onChange={(e) => setBidAmount(Number(e.target.value))}
-              className="me-2"
-              style={{ height: "50px" }}
-            />
-            <Button type="submit" variant="success" style={{ height: "50px", width: "120px" }}>
-              Submit
-            </Button>
-          </Form>
-
-          {/* Кнопка пожертвования ставки */}
-          {auction.bids.length > 0 && new Date(auction.endTime) < new Date() && canDonate && (
-            <Button
-              variant="outline-success"
-              className="w-100 mt-3"
-              onClick={handleDonateBid}
-            >
-              Donate your Bid (${userBid?.amount})
-            </Button>
+          {!auction.isActive && isWinner && !auction.isSold && (
+            <>
+              <h5 className="text-success text-center mb-3">🎉 You have won the auction!</h5>
+              <Button variant="success" className="w-100 mb-3" onClick={handlePayment}>
+                Pay Now
+              </Button>
+            </>
           )}
 
-          {/* Общая сумма */}
+          {auction.isActive && (
+            <Form className="d-flex" onSubmit={(e) => {
+              e.preventDefault();
+              handleBidSubmit();
+            }}>
+              <Form.Control
+                type="number"
+                min={currentBid + 1}
+                value={bidAmount}
+                onChange={(e) => setBidAmount(Number(e.target.value))}
+                className="me-2"
+                style={{ height: "50px" }}
+              />
+              <Button
+                type="submit"
+                variant="success"
+                style={{ height: "50px", width: "120px" }}
+              >
+                Submit
+              </Button>
+            </Form>
+          )}
+
+          {auction.bids.length > 0 &&
+            new Date(auction.endTime) < new Date() &&
+            canDonate && (
+              <Button
+                variant="outline-success"
+                className="w-100 mt-3"
+                onClick={handleDonateBid}
+              >
+                Donate your Bid (${userBid?.amount})
+              </Button>
+          )}
+
           <div className="bg-light p-3 rounded shadow-sm mt-4">
             <h5 className="text-center">Total Raised:</h5>
             <h4 className="text-success text-center">${totalRaised}</h4>
           </div>
-
         </Col>
       </Row>
-
       <Tabs
         activeKey={key}
         onSelect={(k) => setKey(k || "description")}
