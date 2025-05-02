@@ -14,6 +14,10 @@ WORKDIR /src
 
 # Копируем файлы проекта и восстанавливаем зависимости
 COPY ["CharityAuction.WebAPI/CharityAuction.WebAPI.csproj", "CharityAuction.WebAPI/"]
+COPY ["CharityAuction.Application/CharityAuction.Application.csproj", "CharityAuction.Application/"]
+COPY ["CharityAuction.Domain/CharityAuction.Domain.csproj", "CharityAuction.Domain/"]
+COPY ["CharityAuction.Infrastructure/CharityAuction.Infrastructure.csproj", "CharityAuction.Infrastructure/"]
+COPY ["CharityAuction.SignalR/CharityAuction.SignalR.csproj", "CharityAuction.SignalR/"]
 RUN dotnet restore "./CharityAuction.WebAPI/CharityAuction.WebAPI.csproj"
 
 # Копируем весь код
