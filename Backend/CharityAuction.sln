@@ -1,0 +1,57 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2B48DE10-ACEF-4B94-BAEB-C37223A3E43E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharityAuction.Application", "CharityAuction.Application\CharityAuction.Application.csproj", "{4B57DAF7-66C4-422E-9EB3-E120A3D0EEDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharityAuction.Domain", "CharityAuction.Domain\CharityAuction.Domain.csproj", "{A8CA610C-3964-485B-8682-CE77FC65654B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharityAuction.Infrastructure", "CharityAuction.Infrastructure\CharityAuction.Infrastructure.csproj", "{388A126F-67BB-4AA1-A9EC-3BB5065D0865}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharityAuction.WebAPI", "CharityAuction.WebAPI\CharityAuction.WebAPI.csproj", "{8FBFCB4F-5535-426E-8FDB-BDB40888ACC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharityAuction.XUnitTest", "CharityAuction.XUnitTest\CharityAuction.XUnitTest.csproj", "{B687CF5C-636E-4B70-AD3A-08F5A9332FCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharityAuction.SignalR", "CharityAuction.SignalR\CharityAuction.SignalR.csproj", "{4DE62439-6D83-462A-A7A9-F7583D20BB8D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B48DE10-ACEF-4B94-BAEB-C37223A3E43E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B48DE10-ACEF-4B94-BAEB-C37223A3E43E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B48DE10-ACEF-4B94-BAEB-C37223A3E43E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B48DE10-ACEF-4B94-BAEB-C37223A3E43E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B57DAF7-66C4-422E-9EB3-E120A3D0EEDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B57DAF7-66C4-422E-9EB3-E120A3D0EEDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B57DAF7-66C4-422E-9EB3-E120A3D0EEDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B57DAF7-66C4-422E-9EB3-E120A3D0EEDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8CA610C-3964-485B-8682-CE77FC65654B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8CA610C-3964-485B-8682-CE77FC65654B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8CA610C-3964-485B-8682-CE77FC65654B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8CA610C-3964-485B-8682-CE77FC65654B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{388A126F-67BB-4AA1-A9EC-3BB5065D0865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{388A126F-67BB-4AA1-A9EC-3BB5065D0865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{388A126F-67BB-4AA1-A9EC-3BB5065D0865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{388A126F-67BB-4AA1-A9EC-3BB5065D0865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FBFCB4F-5535-426E-8FDB-BDB40888ACC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FBFCB4F-5535-426E-8FDB-BDB40888ACC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FBFCB4F-5535-426E-8FDB-BDB40888ACC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FBFCB4F-5535-426E-8FDB-BDB40888ACC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B687CF5C-636E-4B70-AD3A-08F5A9332FCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B687CF5C-636E-4B70-AD3A-08F5A9332FCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B687CF5C-636E-4B70-AD3A-08F5A9332FCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B687CF5C-636E-4B70-AD3A-08F5A9332FCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DE62439-6D83-462A-A7A9-F7583D20BB8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DE62439-6D83-462A-A7A9-F7583D20BB8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DE62439-6D83-462A-A7A9-F7583D20BB8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DE62439-6D83-462A-A7A9-F7583D20BB8D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
