@@ -1,100 +1,85 @@
-import { useState, useEffect } from 'react';
-import { Container, Form, Button, Toast, ToastContainer, Spinner, Alert } from 'react-bootstrap';
-import { createAuction, getAuctionById, updateAuction } from '../../api/auction';
+import { useEffect, useState } from 'react';
+import { Container, Form, Button, Spinner, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useAuction } from '../../hooks/useAuction';
+import { useForm } from '../../hooks/useForm';
+import { useNotification } from '../../hooks/useNotification';
 
 type AuctionFormProps = {
   auctionId?: string;
   onClose?: () => void;
 };
 
+const initialValues = {
+  title: '',
+  description: '',
+  startingPrice: 0,
+  imageUrl: '',
+  startTime: '',
+  endTime: '',
+};
+
+const validationRules = {
+  title: (value: string) => !value ? 'Назва обов\'язкова' : null,
+  startingPrice: (value: number) => value <= 0 ? 'Ціна повинна бути більше 0' : null,
+  imageUrl: (value: string) => !value ? 'Посилання на зображення обов\'язкове' : null,
+  startTime: (value: string) => !value ? 'Дата початку обов\'язкова' : null,
+  endTime: (value: string) => !value ? 'Дата завершення обов\'язкова' : null,
+};
+
 const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    startingPrice: 0,
-    imageUrl: '',
-    startTime: '',
-    endTime: '',
-  });
   const [isActive, setIsActive] = useState(true);
-  const [showToast, setShowToast] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  const { loading, error, fetchAuctionById, createNewAuction, updateExistingAuction } = useAuction();
+  const { values, errors, touched, handleChange, handleBlur, validateForm, resetForm } = useForm(initialValues, validationRules);
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     if (auctionId) {
-      fetchAuction();
+      loadAuction();
     }
   }, [auctionId]);
 
-  const fetchAuction = async () => {
+  const loadAuction = async () => {
     try {
-      setLoading(true);
-      const auction = await getAuctionById(auctionId!);
-      setFormData({
-        title: auction.title,
-        description: auction.description || '',
-        startingPrice: auction.startingPrice,
-        imageUrl: auction.imageUrl,
-        startTime: new Date(auction.startTime).toISOString().slice(0, 16),
-        endTime: new Date(auction.endTime).toISOString().slice(0, 16),
-      });
+      const auction = await fetchAuctionById(auctionId!);
+      handleChange('title', auction.title);
+      handleChange('description', auction.description || '');
+      handleChange('startingPrice', auction.startingPrice);
+      handleChange('imageUrl', auction.imageUrl);
+      handleChange('startTime', new Date(auction.startTime).toISOString().slice(0, 16));
+      handleChange('endTime', new Date(auction.endTime).toISOString().slice(0, 16));
       setIsActive(auction.isActive);
     } catch (error) {
       console.error('Помилка при завантаженні аукціону', error);
-      setErrorMessage('Не вдалося завантажити дані аукціону.');
-    } finally {
-      setLoading(false);
+      showNotification('error', 'Не вдалося завантажити дані аукціону');
     }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage(null); // очистить предыдущее сообщение
-    try {
-      const formattedData = {
-        ...formData,
-        startTime: new Date(formData.startTime),
-        endTime: new Date(formData.endTime),
-      };
+    
+    if (!validateForm()) {
+      return;
+    }
 
+    try {
       if (auctionId) {
-        await updateAuction({
-          ...formattedData,
-          id: auctionId,
-          isActive,
-        });
-        setShowToast(true);
+        await updateExistingAuction(auctionId, { ...values, isActive });
+        showNotification('success', 'Аукціон успішно оновлено!');
         setTimeout(() => {
           onClose ? onClose() : navigate('/my-products');
         }, 1500);
       } else {
-        await createAuction(formattedData);
-        setFormData({
-          title: '',
-          description: '',
-          startingPrice: 0,
-          imageUrl: '',
-          startTime: '',
-          endTime: '',
-        });
+        await createNewAuction(values);
+        resetForm();
         setIsActive(true);
-        setShowToast(true);
+        showNotification('success', 'Аукціон успішно створено!');
       }
-
     } catch (error) {
       console.error('Помилка при збереженні аукціону', error);
-      setErrorMessage('Не вдалося зберегти аукціон. Перевірте дані та спробуйте ще раз.');
+      showNotification('error', 'Не вдалося зберегти аукціон. Перевірте дані та спробуйте ще раз.');
     }
   };
 
@@ -110,10 +95,9 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
     <Container className="py-4">
       <h4 className="mb-4">{auctionId ? 'Редагувати аукціон' : 'Створити новий аукціон'}</h4>
 
-      {/* Повідомлення про помилку */}
-      {errorMessage && (
-        <Alert variant="danger" onClose={() => setErrorMessage(null)} dismissible>
-          {errorMessage}
+      {error && (
+        <Alert variant="danger" onClose={() => {}} dismissible>
+          {error}
         </Alert>
       )}
 
@@ -123,10 +107,14 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
           <Form.Control
             type="text"
             name="title"
-            value={formData.title}
-            onChange={handleChange}
-            required
+            value={values.title}
+            onChange={(e) => handleChange('title', e.target.value)}
+            onBlur={() => handleBlur('title')}
+            isInvalid={touched.title && !!errors.title}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.title}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -135,8 +123,8 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
             as="textarea"
             name="description"
             rows={3}
-            value={formData.description}
-            onChange={handleChange}
+            value={values.description}
+            onChange={(e) => handleChange('description', e.target.value)}
           />
         </Form.Group>
 
@@ -146,10 +134,14 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
             type="number"
             step="0.01"
             name="startingPrice"
-            value={formData.startingPrice}
-            onChange={handleChange}
-            required
+            value={values.startingPrice}
+            onChange={(e) => handleChange('startingPrice', parseFloat(e.target.value))}
+            onBlur={() => handleBlur('startingPrice')}
+            isInvalid={touched.startingPrice && !!errors.startingPrice}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.startingPrice}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -157,10 +149,14 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
           <Form.Control
             type="text"
             name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            required
+            value={values.imageUrl}
+            onChange={(e) => handleChange('imageUrl', e.target.value)}
+            onBlur={() => handleBlur('imageUrl')}
+            isInvalid={touched.imageUrl && !!errors.imageUrl}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.imageUrl}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -168,10 +164,14 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
           <Form.Control
             type="datetime-local"
             name="startTime"
-            value={formData.startTime}
-            onChange={handleChange}
-            required
+            value={values.startTime}
+            onChange={(e) => handleChange('startTime', e.target.value)}
+            onBlur={() => handleBlur('startTime')}
+            isInvalid={touched.startTime && !!errors.startTime}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.startTime}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-4">
@@ -179,25 +179,20 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
           <Form.Control
             type="datetime-local"
             name="endTime"
-            value={formData.endTime}
-            onChange={handleChange}
-            required
+            value={values.endTime}
+            onChange={(e) => handleChange('endTime', e.target.value)}
+            onBlur={() => handleBlur('endTime')}
+            isInvalid={touched.endTime && !!errors.endTime}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.endTime}
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Button variant="primary" type="submit">
           {auctionId ? 'Оновити аукціон' : 'Створити аукціон'}
         </Button>
       </Form>
-
-      {/* Тост повідомлення про успіх */}
-      <ToastContainer position="top-end" className="p-3">
-        <Toast bg="success" show={showToast} onClose={() => setShowToast(false)} delay={2000} autohide>
-          <Toast.Body className="text-white">
-            {auctionId ? 'Аукціон успішно оновлено!' : 'Аукціон успішно створено!'}
-          </Toast.Body>
-        </Toast>
-      </ToastContainer>
     </Container>
   );
 };

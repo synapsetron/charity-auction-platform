@@ -1,44 +1,15 @@
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
-import zsuBackground from "../assets/images/zsu-hero-background.png"; // новий фон
+import zsuBackground from "../assets/images/zsu-hero-background.png";
 import zsuSupport from "../assets/images/zsu_support.jpg";
-
-
-
-const handleTestPayment = async () => {
-  try {
-    const response = await fetch("http://localhost:5000/api/payment/liqpay", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: "test-user",
-        auctionId: "29fe88ee-701c-42c3-9a4f-7d1926d1c23f",
-        amount: 250.0,
-        currency: "UAH",
-        description: "Test charity donation"
-      })
-    });
-
-    const html = await response.text();
-    const win = window.open("", "_blank");
-
-    if (win) {
-      win.document.write(html);
-      win.document.close();
-    } else {
-      alert("🔒 Ваш браузер заблокував відкриття вікна для оплати. Дозвольте pop-up у налаштуваннях.");
-    }
-  } catch (err) {
-    console.error("Error triggering test payment:", err);
-    alert("❌ Не вдалося ініціювати оплату. Перевірте консоль.");
-  }
-};
-
+import { useTranslation } from "react-i18next";
 
 const HomePage = () => {
+  const { t } = useTranslation();
+
   return (
     <>
-      {/* Головна секція з фоном */}
+      {/* Hero Section */}
       <div
         className="position-relative"
         style={{
@@ -54,12 +25,9 @@ const HomePage = () => {
           <Row className="align-items-center text-center text-md-start position-relative">
             <Col md={6} className="pe-md-5" style={{ zIndex: 2 }}>
               <h1 className="fw-bold mb-4 display-4">
-                Build, sell & collect digital items.
+                {t("homepage.title")}
               </h1>
-              <p className="mb-5">
-                Підтримай Збройні сили України через цифрові аукціони. Купуй
-                унікальні лоти, допомагай разом!
-              </p>
+              <p className="mb-5">{t("homepage.subtitle")}</p>
               <Form
                 className="d-flex bg-white rounded-pill overflow-hidden px-4 py-3 align-items-center mx-auto mx-md-0"
                 style={{ maxWidth: "600px" }}
@@ -67,44 +35,33 @@ const HomePage = () => {
                 <FaSearch className="text-muted me-3 fs-5" />
                 <Form.Control
                   type="text"
-                  placeholder="Search product..."
+                  placeholder={t("homepage.search_placeholder")}
                   className="border-0 shadow-none flex-grow-1 fs-5"
                 />
-                <Button
-                  variant="success"
-                  className="rounded-pill px-5 py-2 fs-5"
-                >
-                  Search
+                <Button variant="success" className="rounded-pill px-5 py-2 fs-5">
+                  {t("homepage.search_button")}
                 </Button>
               </Form>
               <div className="d-flex gap-5 justify-content-center justify-content-md-start mt-5">
                 <div className="text-center">
                   <h4 className="fw-bold">82M+</h4>
-                  <small>Total Product</small>
+                  <small>{t("homepage.total_product")}</small>
                 </div>
                 <div className="text-center">
                   <h4 className="fw-bold">82M+</h4>
-                  <small>Total Auction</small>
+                  <small>{t("homepage.total_auction")}</small>
                 </div>
                 <div className="text-center">
                   <h4 className="fw-bold">54</h4>
-                  <small>Total Category</small>
+                  <small>{t("homepage.total_category")}</small>
                 </div>
-                <Button
-                  onClick={handleTestPayment}
-                  className="btn btn-warning mt-4"
-                >
-                  🔥 Тестова оплата 1₴
-                </Button>
               </div>
             </Col>
-
-            {/* Праву частину (Col md={6}) видаляємо — фон сам справляється */}
           </Row>
         </Container>
       </div>
 
-      {/* Секція About */}
+      {/* About Section */}
       <section
         style={{
           backgroundColor: "#fff",
@@ -116,16 +73,10 @@ const HomePage = () => {
         <Container>
           <Row className="align-items-center">
             <Col md={6}>
-              <h2 className="fw-bold mb-4 display-5">
-                Наша мета — підтримка ЗСУ через цифрові аукціони
-              </h2>
-              <p>
-                Ми створили платформу, де кожен може виставити лот, прийняти
-                участь в аукціоні та допомогти українській армії. Всі зібрані
-                кошти йдуть виключно на потреби захисників.
-              </p>
+              <h2 className="fw-bold mb-4 display-5">{t("homepage.about_title")}</h2>
+              <p>{t("homepage.about_description")}</p>
               <Button variant="success" className="mt-4 px-4 py-2 fs-5">
-                Дізнатися більше
+                {t("homepage.about_button")}
               </Button>
             </Col>
             <Col md={6}>
@@ -150,26 +101,20 @@ const HomePage = () => {
       >
         <Container>
           <h2 className="text-center fw-bold mb-5 display-6">
-            Як працює платформа
+            {t("homepage.how_title")}
           </h2>
           <Row className="text-center">
             <Col md={4}>
-              <h4 className="fw-semibold">1. Створи лот</h4>
-              <p>
-                Опиши цифровий товар чи послугу, яку ти хочеш виставити на
-                аукціон.
-              </p>
+              <h4 className="fw-semibold">{t("homepage.how_step_1")}</h4>
+              <p>{t("homepage.how_step_1_desc")}</p>
             </Col>
             <Col md={4}>
-              <h4 className="fw-semibold">2. Приймай участь</h4>
-              <p>
-                Ставки робляться онлайн. Переможець — найвища ставка до
-                дедлайну.
-              </p>
+              <h4 className="fw-semibold">{t("homepage.how_step_2")}</h4>
+              <p>{t("homepage.how_step_2_desc")}</p>
             </Col>
             <Col md={4}>
-              <h4 className="fw-semibold">3. Допомагай ЗСУ</h4>
-              <p>Усі кошти автоматично йдуть до волонтерського фонду.</p>
+              <h4 className="fw-semibold">{t("homepage.how_step_3")}</h4>
+              <p>{t("homepage.how_step_3_desc")}</p>
             </Col>
           </Row>
         </Container>
@@ -186,7 +131,7 @@ const HomePage = () => {
       >
         <Container>
           <h2 className="text-center fw-bold mb-5 display-6">
-            Популярні аукціони
+            {t("homepage.popular_title")}
           </h2>
           <Row>
             {[1, 2, 3].map((i) => (
@@ -197,10 +142,12 @@ const HomePage = () => {
                     alt={`Auction ${i}`}
                     className="img-fluid rounded mb-3"
                   />
-                  <h5 className="fw-bold">Унікальний NFT арт {i}</h5>
-                  <p>Стартова ціна: {500 + i * 100} ₴</p>
+                  <h5 className="fw-bold">{`${t("homepage.auction_title")} ${i}`}</h5>
+                  <p>
+                    {t("homepage.auction_price")}: {500 + i * 100} ₴
+                  </p>
                   <Button variant="outline-success" size="lg">
-                    Детальніше
+                    {t("homepage.auction_button")}
                   </Button>
                 </div>
               </Col>

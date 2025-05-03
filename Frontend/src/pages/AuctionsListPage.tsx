@@ -12,12 +12,14 @@ import { AuctionCard } from "../components/auction/AuctionCard";
 import { AuctionResponseWithBidsDTO } from "../types/auctionTypes";
 import { getApprovedAuctions } from "../api/auction";
 import { FaSearch } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 export const AuctionsListPage = () => {
   const [auctions, setAuctions] = useState<AuctionResponseWithBidsDTO[]>([]);
   const [filtered, setFiltered] = useState<AuctionResponseWithBidsDTO[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchAuctions = async () => {
@@ -46,15 +48,13 @@ export const AuctionsListPage = () => {
   return (
     <Container className="py-5">
       <div className="text-center mb-4">
-        <h2 className="fw-bold">Explore Our Auctions</h2>
-        <p className="text-muted">
-          Discover exclusive items and support a great cause — every bid matters.
-        </p>
+        <h2 className="fw-bold">{t("auctionslist.title")}</h2>
+        <p className="text-muted">{t("auctionslist.subtitle")}</p>
       </div>
 
       <InputGroup className="mb-4">
         <Form.Control
-          placeholder="Search auctions..."
+          placeholder={t("auctionslist.search_placeholder")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -69,7 +69,7 @@ export const AuctionsListPage = () => {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-5">
-          <p className="text-muted">No auctions found matching your search.</p>
+          <p className="text-muted">{t("auctionslist.no_results")}</p>
         </div>
       ) : (
         <Row xs={1} md={2} lg={3} className="g-4">

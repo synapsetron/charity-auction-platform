@@ -10,6 +10,7 @@ import { FaSearch, FaUserCircle, FaBell } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { logoutUser } from "../../api/auth";
 import logo from "../../assets/icons/hammer.png";
+import { useTranslation } from "react-i18next";
 
 type Notification = {
   title: string;
@@ -17,7 +18,7 @@ type Notification = {
   createdAt: string;
 };
 
-const API_URL = process.env.REACT_APP_BACKEND_URL; // как у тебя в AuctionDetailsPage
+const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -27,6 +28,16 @@ function Header() {
   const navigate = useNavigate();
   const connectionRef = useRef<HubConnection | null>(null);
   const isMounted = useRef(true);
+  const { t, i18n } = useTranslation();
+
+  const [language, setLanguage] = useState<"ua" | "en">(
+    (i18n.language as "ua" | "en") || "ua"
+  );
+
+  const toggleLanguage = (lang: "ua" | "en") => {
+    setLanguage(lang);
+    i18n.changeLanguage(lang);
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -49,32 +60,35 @@ function Header() {
         }
 
         const newConnection = new HubConnectionBuilder()
-        .withUrl(`${API_URL}/auctionHub`, {
-          withCredentials: true
-        })
-        .withAutomaticReconnect()
-        .build();
-      
+          .withUrl(`${API_URL}/auctionHub`, {
+            withCredentials: true,
+          })
+          .withAutomaticReconnect()
+          .build();
 
-          newConnection.on("ReceiveNotification", (notification: Notification) => {
+        newConnection.on(
+          "ReceiveNotification",
+          (notification: Notification) => {
             if (isMounted.current) {
-              setNotifications(prev => {
-                const alreadyExists = prev.some(n => 
-                  n.title === notification.title &&
-                  n.message === notification.message &&
-                  n.createdAt === notification.createdAt
+              setNotifications((prev) => {
+                const alreadyExists = prev.some(
+                  (n) =>
+                    n.title === notification.title &&
+                    n.message === notification.message &&
+                    n.createdAt === notification.createdAt
                 );
-                
+
                 if (!alreadyExists) {
                   return [...prev, notification];
                 } else {
                   return prev;
                 }
               });
-          
-              setUnreadCount(prev => prev + 1);
+
+              setUnreadCount((prev) => prev + 1);
             }
-          });
+          }
+        );
 
         await newConnection.start();
         if (isMounted.current) {
@@ -109,7 +123,7 @@ function Header() {
       style={{
         transition: "background-color 0.3s, color 0.3s",
         backgroundColor: isScrolled ? "#fff" : "#153738",
-        color: isScrolled ? "#000" : "#fff"
+        color: isScrolled ? "#000" : "#fff",
       }}
       variant={isScrolled ? "light" : "dark"}
       className={isScrolled ? "shadow-sm" : ""}
@@ -120,12 +134,11 @@ function Header() {
           to="/"
           className="d-flex align-items-center gap-2"
         >
-          <img
-            src={logo}
-            alt="Logo"
-            style={{ height: "32px" }}
-          />
-          <span className="fw-bold" style={{ color: isScrolled ? "#000" : "#fff" }}>
+          <img src={logo} alt="Logo" style={{ height: "32px" }} />
+          <span
+            className="fw-bold"
+            style={{ color: isScrolled ? "#000" : "#fff" }}
+          >
             ДоброBid
           </span>
         </Navbar.Brand>
@@ -134,12 +147,12 @@ function Header() {
         <Navbar.Collapse id="main-navbar" className="justify-content-between">
           <Nav className="gap-3">
             {[
-              { text: "Home", link: "/home" },
-              { text: "Auctions", link: "/auctions" },
-              { text: "Blog", link: "/blog" },
-              { text: "About", link: "/about" },
-              { text: "Services", link: "/services" },
-              { text: "Contact", link: "/contact" },
+              { text: t("home"), link: "/home" },
+              { text: t("auctions"), link: "/auctions" },
+              { text: t("blog"), link: "/blog" },
+              { text: t("about"), link: "/about" },
+              { text: t("services"), link: "/services" },
+              { text: t("contact"), link: "/contact" },
             ].map(({ text, link }) => (
               <Nav.Link
                 as={Link}
@@ -153,7 +166,38 @@ function Header() {
           </Nav>
 
           <div className="d-flex align-items-center gap-3 position-relative">
-            <FaSearch style={{ color: isScrolled ? "black" : "white", cursor: "pointer" }} />
+            {/* Language Switch Dropdown */}
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="outline-light"
+                size="sm"
+                className="rounded-pill px-3"
+                style={{
+                  backgroundColor: isScrolled ? "#f0f0f0" : "transparent",
+                  color: isScrolled ? "#000" : "#fff",
+                  border: "1px solid",
+                  borderColor: isScrolled ? "#ccc" : "#fff",
+                }}
+              >
+                {language.toUpperCase()}
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => toggleLanguage("ua")}>
+                  UA - Українська
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => toggleLanguage("en")}>
+                  EN - English
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <FaSearch
+              style={{
+                color: isScrolled ? "black" : "white",
+                cursor: "pointer",
+              }}
+            />
 
             {user && (
               <Dropdown
@@ -167,20 +211,25 @@ function Header() {
                 <Dropdown.Toggle
                   variant="link"
                   id="dropdown-notifications"
-                  style={{ color: isScrolled ? "black" : "white", position: "relative" }}
+                  style={{
+                    color: isScrolled ? "black" : "white",
+                    position: "relative",
+                  }}
                 >
                   <FaBell size={24} />
                   {unreadCount > 0 && (
-                    <span style={{
-                      backgroundColor: "red",
-                      color: "white",
-                      borderRadius: "50%",
-                      fontSize: "10px",
-                      padding: "2px 6px",
-                      position: "absolute",
-                      top: "-5px",
-                      right: "-5px"
-                    }}>
+                    <span
+                      style={{
+                        backgroundColor: "red",
+                        color: "white",
+                        borderRadius: "50%",
+                        fontSize: "10px",
+                        padding: "2px 6px",
+                        position: "absolute",
+                        top: "-5px",
+                        right: "-5px",
+                      }}
+                    >
                       {unreadCount}
                     </span>
                   )}
@@ -188,7 +237,9 @@ function Header() {
 
                 <Dropdown.Menu style={{ minWidth: "300px" }}>
                   {notifications.length === 0 ? (
-                    <Dropdown.ItemText>No notifications</Dropdown.ItemText>
+                    <Dropdown.ItemText>
+                      {t("no_notifications")}
+                    </Dropdown.ItemText>
                   ) : (
                     notifications.map((n, idx) => (
                       <Dropdown.Item key={idx}>
@@ -209,10 +260,18 @@ function Header() {
                   className="d-flex align-items-center gap-2"
                 >
                   <FaUserCircle size={24} />
-                  <span className={isScrolled ? "text-dark" : "text-white"}>{user.firstName}</span>
+                  <span
+                    className={isScrolled ? "text-dark" : "text-white"}
+                  >
+                    {user.firstName}
+                  </span>
                 </Nav.Link>
-                <Button variant="danger" onClick={handleLogout} className="rounded-pill px-4">
-                  Logout
+                <Button
+                  variant="danger"
+                  onClick={handleLogout}
+                  className="rounded-pill px-4"
+                >
+                  {t("logout")}
                 </Button>
               </>
             ) : (
@@ -222,15 +281,21 @@ function Header() {
                   to="/login"
                   className={isScrolled ? "text-dark" : "text-white"}
                 >
-                  Sign in
+                  {t("sign_in")}
                 </Nav.Link>
 
-                <Button as="div" variant={isScrolled ? "dark" : "light"} className="rounded-pill px-4">
+                <Button
+                  as="div"
+                  variant={isScrolled ? "dark" : "light"}
+                  className="rounded-pill px-4"
+                >
                   <Link
                     to="/register"
-                    className={`text-decoration-none d-block px-3 py-1 ${isScrolled ? "text-white" : "text-dark"}`}
+                    className={`text-decoration-none d-block px-3 py-1 ${
+                      isScrolled ? "text-white" : "text-dark"
+                    }`}
                   >
-                    Join
+                    {t("join")}
                   </Link>
                 </Button>
               </>

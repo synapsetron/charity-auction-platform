@@ -1,0 +1,197 @@
+{
+  "home": "Home",
+  "auctions": "Auctions",
+  "blog": "Blog",
+  "about": "About",
+  "services": "Services",
+  "contact": "Contact",
+  "sign_in": "Sign in",
+  "join": "Join",
+  "logout": "Logout",
+
+  "homepage": {
+    "title": "Build, sell & collect digital items.",
+    "subtitle": "Support the Armed Forces of Ukraine through digital auctions. Buy unique lots and help together!",
+    "search_placeholder": "Search product...",
+    "search_button": "Search",
+    "total_product": "Total Product",
+    "total_auction": "Total Auction",
+    "total_category": "Total Category",
+    "about_title": "Our mission — support the Armed Forces through digital auctions",
+    "about_description": "We created a platform where anyone can list a lot, participate in auctions, and help the Ukrainian army. All funds go directly to the needs of defenders.",
+    "about_button": "Learn more",
+    "how_title": "How the platform works",
+    "how_step_1": "1. Create a lot",
+    "how_step_1_desc": "Describe the digital item or service you want to auction.",
+    "how_step_2": "2. Participate",
+    "how_step_2_desc": "Bids are made online. The winner is the highest bid before the deadline.",
+    "how_step_3": "3. Help the Armed Forces",
+    "how_step_3_desc": "All funds go directly to a volunteer foundation.",
+    "popular_title": "Popular Auctions",
+    "auction_title": "Unique NFT art",
+    "auction_price": "Starting price",
+    "auction_button": "Details"
+  },
+  "aboutpage": {
+    "title": "About the project 'DobroBid'",
+    "subtitle": "A platform that unites kindness, art, and the indomitable spirit of Ukrainians.",
+    "mission_title": "Our Mission",
+    "mission_p1": "We created 'DobroBid' so that everyone can become part of a great cause — supporting the Armed Forces of Ukraine. Through charity auctions, every bid brings us closer to victory and peace.",
+    "mission_p2": "We believe: even a small contribution made from the heart has enormous power.",
+    "what_we_do_title": "What we do",
+    "what_we_do_list": [
+      "Organize online auctions with real and digital lots.",
+      "Work with trusted volunteers, artists, veterans.",
+      "Ensure transparent processing of every bid.",
+      "Promote a culture of charity among youth and business.",
+      "Publish weekly reports on fund distribution."
+    ],
+    "how_it_works_title": "How it works",
+    "step_1_title": "Create or choose a lot",
+    "step_1_desc": "List a lot for charity auction or find one that inspires you.",
+    "step_2_title": "Place a bid",
+    "step_2_desc": "Participate in auctions. Every bid is a step toward victory.",
+    "step_3_title": "Receive a lot or thanks",
+    "step_3_desc": "Win — and we’ll deliver the lot, or support as a donor.",
+    "total_transferred_title": "Over ₴1,000,000 already transferred to the army!",
+    "total_transferred_desc": "Thanks to kind people and transparent processes, we turn bids into real help.",
+    "support_badge": "Support our defenders now",
+    "join_us_title": "Join us",
+    "join_us_desc": "You can be part of a great mission — do a good deed that changes history. Together we are strong!"
+  },
+  "blogpage": {
+  "title": "Latest News & Stories",
+  "read_more": "Read More",
+  "load_more": "Load More"
+},
+"servicespage": {
+  "title": "What We Offer",
+  "services": [
+    {
+      "title": "Auction Management",
+      "desc": "Easily list and manage auctions for both digital and physical items. Schedule start and end times, set reserve prices, and control approval flows."
+    },
+    {
+      "title": "User Engagement",
+      "desc": "Boost participation with real-time bidding updates, notification alerts, and personalized experiences tailored to each bidder."
+    },
+    {
+      "title": "Analytics & Reports",
+      "desc": "Track user behavior, bid frequency, donation history and more with powerful real-time analytics and custom dashboards."
+    },
+    {
+      "title": "Performance Optimization",
+      "desc": "Built for scale — lightning-fast performance with server-side rendering, caching, and CDN delivery to ensure the best UX."
+    },
+    {
+      "title": "Community Building",
+      "desc": "Create a loyal user base with leaderboards, donation streaks, trust scores, and gamification to drive interaction and cause impact."
+    },
+    {
+      "title": "Security & Privacy",
+      "desc": "State-of-the-art security including two-factor authentication, end-to-end encryption, audit logs, and GDPR compliance."
+    }
+  ],
+  "cta_title": "Ready to get started?",
+  "cta_text": "Let us help you launch your own charity auction platform with ease and confidence.",
+  "cta_button": "Contact Our Team"
+},
+"registerpage": {
+  "title": "Register",
+  "breadcrumb_home": "Home",
+  "breadcrumb_register": "Register",
+  "already_have_account": "Already have an account?",
+  "login_link": "Login",
+  "form": {
+    "first_name": "First Name *",
+    "last_name": "Last Name *",
+    "email": "Email *",
+    "password": "Password *",
+    "confirm_password": "Confirm Password *",
+    "placeholder_first_name": "Enter first name",
+    "placeholder_last_name": "Enter last name",
+    "placeholder_email": "Enter email",
+    "placeholder_password": "Enter password",
+    "placeholder_confirm_password": "Repeat password"
+  },
+  "submit": "Create Account",
+  "submitting": "Creating Account...",
+  "error_passwords_mismatch": "Passwords do not match",
+  "terms_text": "By clicking register, you agree to the",
+  "terms": "terms",
+  "privacy": "privacy policy"
+},
+"loginpage": {
+  "title_login": "Login",
+  "title_reset": "Password Recovery",
+  "breadcrumb_home": "Home",
+  "breadcrumb_login": "Login",
+  "breadcrumb_reset": "Recovery"
+},
+"profilepage": {
+  "not_found": "User not found. Please log in.",
+  "title_name": "First Name",
+  "title_lastname": "Last Name",
+  "title_email": "Email",
+  "title_role": "Role",
+  "title_old_password": "Old Password",
+  "title_new_password": "New Password",
+  "email_tooltip": "Email cannot be changed",
+  "submit_button": "Update Profile",
+  "success_toast": "Profile updated successfully!",
+  "error_same_password": "New password cannot be the same as old",
+  "error_update": "Failed to update profile"
+},
+"contactpage": {
+  "title": "Get in Touch With Us",
+  "subtitle": "Have a question or just want to say hello? We'd love to hear from you!",
+  "form_title": "Send Us a Message",
+  "name_label": "Your Name",
+  "email_label": "Your Email",
+  "message_label": "Your Message",
+  "submit_button": "Send Message",
+  "contact_title": "Reach Us Directly",
+  "address_heading": "Kyiv, Ukraine",
+  "address_text": "Independence Square 1, Office 12",
+  "phone_heading": "+380 99 999 99 99",
+  "phone_text": "Call us Mon–Fri, 10am–6pm",
+  "email_heading": "support@dobro.bid",
+  "email_text": "We reply within 1 business day"
+},
+"auctionslist": {
+  "title": "Explore Our Auctions",
+  "subtitle": "Discover exclusive items and support a great cause — every bid matters.",
+  "search_placeholder": "Search auctions...",
+  "no_results": "No auctions found matching your search."
+},
+"auctiondetails": {
+  "loading": "Loading...",
+  "item_condition": "Item condition:",
+  "item_verified": "Item verified:",
+  "new": "New",
+  "no": "No",
+  "time_left": "Time left",
+  "auction_ended": "Auction Ended",
+  "auction_ends": "Auction ends:",
+  "timezone": "Timezone: UTC 0",
+  "price": "Price:",
+  "current_bid": "Current Bid:",
+  "you_won": "🎉 You have won the auction!",
+  "pay_now": "Pay Now",
+  "place_bid": "Place Bid",
+  "donate_bid": "Donate your Bid",
+  "total_raised": "Total Raised:",
+  "tab_description": "Description",
+  "tab_history": "Auction History",
+  "tab_reviews": "Reviews(2)",
+  "tab_products": "More Products",
+  "no_bids": "No bids yet",
+  "reviews_placeholder": "No reviews yet. Be the first to review!",
+  "more_coming": "Other products coming soon..."
+}
+
+
+
+
+
+}

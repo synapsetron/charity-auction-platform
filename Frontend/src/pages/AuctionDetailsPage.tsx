@@ -19,6 +19,7 @@ import { getCurrentUser } from "../api/auth";
 import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
 import Countdown from "react-countdown";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -33,7 +34,7 @@ const AuctionDetailsPage = () => {
   const [key, setKey] = useState<string>("description");
   const connectionRef = useRef<HubConnection | null>(null);
   const isMounted = useRef(true);
-
+  const { t } = useTranslation();
   const refreshAuction = async () => {
     if (!id) return;
     try {
@@ -221,16 +222,16 @@ const AuctionDetailsPage = () => {
           <p className="text-muted">{auction.description}</p>
 
           <div className="d-flex justify-content-between mb-3">
-            <span>Item condition:</span>
-            <Badge bg="success">New</Badge>
+            <span>{t("auctiondetails.item_condition")}</span>
+            <Badge bg="success">{t("auctiondetails.new")}</Badge>
           </div>
           <div className="d-flex justify-content-between mb-3">
-            <span>Item verified:</span>
-            <Badge bg="danger">No</Badge>
+            <span>{t("auctiondetails.item_verified")}</span>
+            <Badge bg="danger">{t("auctiondetails.no")}</Badge>
           </div>
 
           <div className="bg-light p-4 rounded shadow-sm mb-4">
-            <h5 className="text-center mb-3 fw-semibold">Time left</h5>
+            <h5 className="text-center mb-3 fw-semibold">{t("auctiondetails.time_left")}</h5>
             <Countdown
               date={new Date(auction.endTime)}
               onComplete={() => {
@@ -240,7 +241,7 @@ const AuctionDetailsPage = () => {
               renderer={({ days, hours, minutes, seconds, completed }) => {
                 if (completed) {
                   return (
-                    <h4 className="text-danger text-center">Auction Ended</h4>
+                    <h4 className="text-danger text-center">{t("auctiondetails.auction_ended")}</h4>
                   );
                 }
                 return (
@@ -268,22 +269,22 @@ const AuctionDetailsPage = () => {
           </div>
 
           <div className="mb-2">
-            <h6 className="text-muted mb-1">Auction ends:</h6>
+            <h6 className="text-muted mb-1">{t("auctiondetails.auction_ends")}</h6>
             <div className="fw-bold">
               {new Date(auction.endTime).toLocaleDateString()}
             </div>
-            <div className="text-muted">Timezone: UTC 0</div>
+            <div className="text-muted">{t("auctiondetails.timezone")}</div>
           </div>
 
           <div className="d-flex justify-content-between my-3">
             <div>
-              <span className="text-muted">Price:</span>
+              <span className="text-muted">{t("auctiondetails.price")}</span>
               <span className="fw-bold text-primary ms-2">
                 ${auction.startingPrice}
               </span>
             </div>
             <div>
-              <span className="text-muted">Current Bid:</span>
+              <span className="text-muted">{t("auctiondetails.current_bid")}</span>
               <span className="fw-bold text-success ms-2">${currentBid}</span>
             </div>
           </div>
@@ -291,14 +292,14 @@ const AuctionDetailsPage = () => {
           {!auction.isActive && isWinner && !auction.isSold && (
             <>
               <h5 className="text-success text-center mb-3">
-                🎉 You have won the auction!
+              {t("auctiondetails.you_won")}
               </h5>
               <Button
                 variant="success"
                 className="w-100 mb-3"
                 onClick={handlePayment}
               >
-                Pay Now
+                {t("auctiondetails.pay_now")}
               </Button>
             </>
           )}
@@ -327,7 +328,7 @@ const AuctionDetailsPage = () => {
                     const response = await createBid(
                       auction.id,
                       currentBid + 100
-                    ); // +100 – минимальный шаг, поправь под бизнес-логику
+                    ); 
                     toast.success(
                       `Ставка на "${auction.title}" успішно створена!`
                     );
@@ -338,7 +339,7 @@ const AuctionDetailsPage = () => {
                   }
                 }}
               >
-                Place Bid
+                {t("auctiondetails.place_bid")}
               </Button>
             </Form>
           )}
@@ -351,14 +352,9 @@ const AuctionDetailsPage = () => {
                 className="w-100 mt-3"
                 onClick={handleDonateBid}
               >
-                Donate your Bid (${userBid?.amount})
+                {t("auctiondetails.donate_bid")} (${userBid?.amount})
               </Button>
             )}
-
-          <div className="bg-light p-3 rounded shadow-sm mt-4">
-            <h5 className="text-center">Total Raised:</h5>
-            <h4 className="text-success text-center">${totalRaised}</h4>
-          </div>
         </Col>
       </Row>
       <Tabs
@@ -370,17 +366,17 @@ const AuctionDetailsPage = () => {
       >
         <Tab
           eventKey="description"
-          title={<span className="fw-semibold px-3">Description</span>}
+          title={<span className="fw-semibold px-3">{t("auctiondetails.tab_description")}</span>}
         >
           <p className="mt-3">{auction.description}</p>
         </Tab>
         <Tab
           eventKey="history"
-          title={<span className="fw-semibold px-3">Auction History</span>}
+          title={<span className="fw-semibold px-3">{t("auctiondetails.tab_history")}</span>}
         >
           <div className="mt-3">
             {auction.bids.length === 0 ? (
-              <p>No bids yet</p>
+              <p>{t("auctiondetails.no_bids")}</p>
             ) : (
               <Table striped bordered hover responsive>
                 <thead>
@@ -411,15 +407,15 @@ const AuctionDetailsPage = () => {
         </Tab>
         <Tab
           eventKey="reviews"
-          title={<span className="fw-semibold px-3">Reviews(2)</span>}
+          title={<span className="fw-semibold px-3">{t("auctiondetails.tab_reviews")}</span>}
         >
-          <p className="mt-3">No reviews yet. Be the first to review!</p>
+          <p className="mt-3">{t("auctiondetails.reviews_placeholder")}</p>
         </Tab>
         <Tab
           eventKey="products"
-          title={<span className="fw-semibold px-3">More Products</span>}
+          title={<span className="fw-semibold px-3">{t("auctiondetails.tab_products")}</span>}
         >
-          <p className="mt-3">Other products coming soon...</p>
+          <p className="mt-3">{t("auctiondetails.more_coming")}</p>
         </Tab>
       </Tabs>
     </Container>

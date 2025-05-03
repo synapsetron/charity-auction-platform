@@ -1,33 +1,33 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Table,
   Spinner,
   Button,
   ButtonGroup,
-  Card,
+  Alert,
 } from "react-bootstrap";
-import { getMyAuctions } from "../../api/auction";
 import { AuctionResponseWithBidsDTO } from "../../types/auctionTypes";
 import AuctionForm from "../auction/AuctionForm";
+import { useAuction } from "../../hooks/useAuction";
+import { useModal } from "../../hooks/useModal";
+import { Modal } from "../common/Modal";
 
 const MyProducts = () => {
   const [auctions, setAuctions] = useState<AuctionResponseWithBidsDTO[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [editAuctionId, setEditAuctionId] = useState<string | null>(null);
+  const { loading, error, fetchMyAuctions } = useAuction();
+  const { isOpen, data, openModal, closeModal } = useModal<string>();
 
   useEffect(() => {
-    fetchMyAuctions();
+    loadAuctions();
   }, []);
 
-  const fetchMyAuctions = async () => {
+  const loadAuctions = async () => {
     try {
-      const data = await getMyAuctions();
+      const data = await fetchMyAuctions();
       setAuctions(data);
     } catch (error) {
       console.error("Помилка при завантаженні аукціонів", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -36,12 +36,12 @@ const MyProducts = () => {
   };
 
   const handleEditAuction = (auctionId: string) => {
-    setEditAuctionId(auctionId);
+    openModal(auctionId);
   };
 
   const handleCloseEdit = () => {
-    setEditAuctionId(null);
-    fetchMyAuctions();
+    closeModal();
+    loadAuctions();
   };
 
   if (loading) {
@@ -55,6 +55,12 @@ const MyProducts = () => {
   return (
     <Container className="py-4">
       <h4>Мої товари</h4>
+
+      {error && (
+        <Alert variant="danger" className="mb-4">
+          {error}
+        </Alert>
+      )}
 
       <div style={{ overflowX: "auto", maxHeight: "600px" }}>
         <Table bordered hover responsive className="align-middle">
@@ -123,23 +129,14 @@ const MyProducts = () => {
         </Table>
       </div>
 
-      {editAuctionId && (
-        <Card className="mt-4 shadow-sm">
-          <Card.Header className="d-flex justify-content-between align-items-center">
-            <strong>Редагувати аукціон</strong>
-            <Button
-              variant="outline-danger"
-              size="sm"
-              onClick={handleCloseEdit}
-            >
-              Закрити
-            </Button>
-          </Card.Header>
-          <Card.Body>
-            <AuctionForm auctionId={editAuctionId} onClose={handleCloseEdit} />
-          </Card.Body>
-        </Card>
-      )}
+      <Modal
+        isOpen={isOpen}
+        onClose={handleCloseEdit}
+        title="Редагувати аукціон"
+        size="lg"
+      >
+        <AuctionForm auctionId={data} onClose={handleCloseEdit} />
+      </Modal>
     </Container>
   );
 };

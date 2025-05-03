@@ -14,8 +14,11 @@ import {
   FaPaperPlane
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 const ContactPage = () => {
+  const { t } = useTranslation();
+
   return (
     <Container className="py-5">
       <motion.h2
@@ -24,7 +27,7 @@ const ContactPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        Get in Touch With Us
+        {t("contactpage.title")}
       </motion.h2>
 
       <motion.p
@@ -33,7 +36,7 @@ const ContactPage = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
-        Have a question or just want to say hello? We'd love to hear from you!
+        {t("contactpage.subtitle")}
       </motion.p>
 
       <Row className="gy-4">
@@ -44,19 +47,19 @@ const ContactPage = () => {
             transition={{ duration: 0.6 }}
           >
             <Card className="p-4 shadow-lg border-0 rounded-4">
-              <h4 className="mb-3 text-success">Send Us a Message</h4>
+              <h4 className="mb-3 text-success">{t("contactpage.form_title")}</h4>
               <Form>
                 <FloatingLabel
                   controlId="contactName"
-                  label="Your Name"
+                  label={t("contactpage.name_label")}
                   className="mb-3"
                 >
-                  <Form.Control type="text" placeholder="Name" />
+                  <Form.Control type="text" placeholder={t("contactpage.name_label")} />
                 </FloatingLabel>
 
                 <FloatingLabel
                   controlId="contactEmail"
-                  label="Your Email"
+                  label={t("contactpage.email_label")}
                   className="mb-3"
                 >
                   <Form.Control type="email" placeholder="name@example.com" />
@@ -64,7 +67,7 @@ const ContactPage = () => {
 
                 <FloatingLabel
                   controlId="contactMessage"
-                  label="Your Message"
+                  label={t("contactpage.message_label")}
                   className="mb-3"
                 >
                   <Form.Control as="textarea" style={{ height: "120px" }} />
@@ -72,7 +75,7 @@ const ContactPage = () => {
 
                 <Button variant="success" type="submit" size="lg">
                   <FaPaperPlane className="me-2" />
-                  Send Message
+                  {t("contactpage.submit_button")}
                 </Button>
               </Form>
             </Card>
@@ -86,26 +89,24 @@ const ContactPage = () => {
             transition={{ duration: 0.6 }}
           >
             <Card className="p-4 shadow-lg border-0 rounded-4 bg-light h-100">
-              <h4 className="mb-3 text-success">Reach Us Directly</h4>
+              <h4 className="mb-3 text-success">{t("contactpage.contact_title")}</h4>
 
               <div className="mb-4">
                 <FaMapMarkerAlt className="me-3 text-success" />
-                <strong>Kyiv, Ukraine</strong>
-                <p className="ms-4 text-muted">
-                  Independence Square 1, Office 12
-                </p>
+                <strong>{t("contactpage.address_heading")}</strong>
+                <p className="ms-4 text-muted">{t("contactpage.address_text")}</p>
               </div>
 
               <div className="mb-4">
                 <FaPhone className="me-3 text-success" />
-                <strong>+380 99 999 99 99</strong>
-                <p className="ms-4 text-muted">Call us Mon–Fri, 10am–6pm</p>
+                <strong>{t("contactpage.phone_heading")}</strong>
+                <p className="ms-4 text-muted">{t("contactpage.phone_text")}</p>
               </div>
 
               <div>
                 <FaEnvelope className="me-3 text-success" />
-                <strong>support@dobro.bid</strong>
-                <p className="ms-4 text-muted">We reply within 1 business day</p>
+                <strong>{t("contactpage.email_heading")}</strong>
+                <p className="ms-4 text-muted">{t("contactpage.email_text")}</p>
               </div>
             </Card>
           </motion.div>

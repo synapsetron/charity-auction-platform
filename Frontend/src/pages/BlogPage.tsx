@@ -1,6 +1,7 @@
 import { Container, Row, Col, Card, Button, Badge } from "react-bootstrap";
 import { FaPenNib, FaUserAlt, FaCalendarAlt, FaTags } from "react-icons/fa";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const blogPosts = Array.from({ length: 12 }).map((_, i) => ({
   id: i + 1,
@@ -14,11 +15,12 @@ const blogPosts = Array.from({ length: 12 }).map((_, i) => ({
 
 const BlogPage = () => {
   const [visiblePosts, setVisiblePosts] = useState(6);
+  const { t } = useTranslation();
 
   return (
     <Container className="py-5">
       <h2 className="text-center mb-5">
-        <FaPenNib className="me-2" /> Latest News & Stories
+        <FaPenNib className="me-2" /> {t("blogpage.title")}
       </h2>
 
       <Row className="gy-4">
@@ -43,7 +45,7 @@ const BlogPage = () => {
               </Card.Body>
               <Card.Footer className="bg-white border-0 text-end">
                 <Button variant="outline-success" size="sm">
-                  Read More
+                  {t("blogpage.read_more")}
                 </Button>
               </Card.Footer>
             </Card>
@@ -58,7 +60,7 @@ const BlogPage = () => {
             variant="success"
             size="lg"
           >
-            Load More
+            {t("blogpage.load_more")}
           </Button>
         </div>
       )}

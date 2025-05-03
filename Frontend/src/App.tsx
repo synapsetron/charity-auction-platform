@@ -26,6 +26,8 @@ import AuctionForm from "components/auction/AuctionForm";
 import { AuthProvider } from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import MyBidsPage from './components/profile/MyBidsPage'
+import { NotificationContainer } from './components/common/NotificationContainer';
+import "./i18n";
 
 const App = () => {
   return (
@@ -78,6 +80,7 @@ const App = () => {
               </Routes>
             </main>
             <Footer />
+            <NotificationContainer />
           </div>
         </Router>
       </AuthProvider>
