@@ -3,8 +3,10 @@ import { Card, Spinner, Alert, Button, Badge, Row, Col } from "react-bootstrap";
 import { getBidHistory, donateBid } from "../../api/bid";
 import { Link } from "react-router-dom";
 import { BidResponseWithWinnerDTO } from "types/bidTypes";
+import { useTranslation } from "react-i18next";
 
 const MyBidsPage: React.FC = () => {
+  const { t } = useTranslation();
   const [bids, setBids] = useState<BidResponseWithWinnerDTO[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,14 +17,14 @@ const MyBidsPage: React.FC = () => {
         const response = await getBidHistory();
         setBids(response);
       } catch (err) {
-        setError("Не вдалося завантажити ставки.");
+        setError(t("my_bids.error_load"));
       } finally {
         setLoading(false);
       }
     };
 
     fetchHistory();
-  }, []);
+  }, [t]);
 
   const handleDonate = async (bidId: string) => {
     try {
@@ -31,7 +33,7 @@ const MyBidsPage: React.FC = () => {
         prev.map((b) => (b.id === bidId ? { ...b, isDonated: true } : b))
       );
     } catch {
-      alert("Помилка при спробі задонатити.");
+      alert(t("my_bids.error_donate"));
     }
   };
 
@@ -44,9 +46,9 @@ const MyBidsPage: React.FC = () => {
 
   return (
     <div>
-      <h4 className="mb-4">Мої ставки</h4>
+      <h4 className="mb-4">{t("my_bids.title")}</h4>
       {bids.length === 0 ? (
-        <p>Ви ще не брали участь у жодному аукціоні.</p>
+        <p>{t("my_bids.no_bids")}</p>
       ) : (
         bids.map((bid) => (
           <Card key={bid.id} className="mb-3 shadow-sm">
@@ -55,28 +57,28 @@ const MyBidsPage: React.FC = () => {
                 <Col md={8}>
                   <h5 className="mb-1">{bid.auctionName}</h5>
                   <p className="mb-1 text-muted">
-                    Сума: <strong>{bid.amount}</strong> грн
+                    {t("my_bids.amount")}: <strong>{bid.amount}</strong> {t("my_bids.UAH")}
                   </p>
                   <p className="mb-1">
-                    Дата ставки: {new Date(bid.createdAt).toLocaleString()}
+                    {t("my_bids.date")}: {new Date(bid.createdAt).toLocaleString()}
                   </p>
                   <p className="mb-1">
-                    Статус:{" "}
+                    {t("my_bids.status")}: {" "}
                     {bid.isAuctionActive ? (
-                      <Badge bg="warning">Очікує завершення</Badge>
+                      <Badge bg="warning">{t("my_bids.pending")}</Badge>
                     ) : bid.isWinner ? (
                       <>
                         <Badge bg="success" className="me-1">
-                          Виграв
+                          {t("my_bids.won")}
                         </Badge>
                         {bid.isAuctionSold ? (
-                          <Badge bg="info">Оплачено</Badge>
+                          <Badge bg="info">{t("my_bids.paid")}</Badge>
                         ) : (
-                          <Badge bg="danger">Неоплачено</Badge>
+                          <Badge bg="danger">{t("my_bids.unpaid")}</Badge>
                         )}
                       </>
                     ) : (
-                      <Badge bg="secondary">Програв</Badge>
+                      <Badge bg="secondary">{t("my_bids.lost")}</Badge>
                     )}
                   </p>
                 </Col>
@@ -86,17 +88,17 @@ const MyBidsPage: React.FC = () => {
                     to={`/auction/${bid.auctionId}`}
                     className="btn btn-outline-primary btn-sm"
                   >
-                    Перейти до аукціону
+                    {t("my_bids.go_to_auction")}
                   </Link>
 
                   {bid.isWinner ? (
                     !bid.isAuctionSold ? (
                       <Button variant="success" size="sm">
-                        Оплатити
+                        {t("my_bids.pay")}
                       </Button>
                     ) : null
                   ) : bid.isDonated ? (
-                    <Badge bg="info">Донат підтверджено</Badge>
+                    <Badge bg="info">{t("my_bids.donated")}</Badge>
                   ) : (
                     <>
                       <Button
@@ -104,14 +106,14 @@ const MyBidsPage: React.FC = () => {
                         size="sm"
                         onClick={() => handleDonate(bid.id)}
                       >
-                        Пожертвувати {bid.amount} грн
+                        {t("my_bids.donate", { amount: bid.amount })}
                       </Button>
                       <Button
                         variant="outline-danger"
                         size="sm"
                         onClick={() => handleRemove(bid.id)}
                       >
-                        Видалити зі списку
+                        {t("my_bids.remove")}
                       </Button>
                     </>
                   )}

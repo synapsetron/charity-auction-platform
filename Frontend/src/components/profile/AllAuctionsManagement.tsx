@@ -1,12 +1,28 @@
 import { useEffect, useState } from "react";
-import { Container, Table, Button, Spinner } from "react-bootstrap";
-import { getAllAuctions} from "../../api/auction"; // добавь если нужно правильные методы
-import { blockAuction,deleteAuction, unblockAuction } from "../../api/adminApi"; // если блокировать/разблокировать
-import { AuctionResponseDTO } from "../../types/auctionTypes"; // твой тип аукциона
+import {
+  Container,
+  Table,
+  Button,
+  Spinner,
+  Modal,
+} from "react-bootstrap";
+import { getAllAuctions } from "../../api/auction";
+import { blockAuction, deleteAuction, unblockAuction } from "../../api/adminApi";
+import { AuctionResponseDTO } from "../../types/auctionTypes";
+import { useTranslation } from "react-i18next";
+import { useModal } from "../../hooks/useModal"; // убедись, что путь корректный
 
 const AllAuctionsManagement = () => {
   const [auctions, setAuctions] = useState<AuctionResponseDTO[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
+
+  const {
+    isOpen: isDeleteModalOpen,
+    data: selectedAuctionId,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModal<string | null>(null);
 
   useEffect(() => {
     fetchAuctions();
@@ -14,18 +30,19 @@ const AllAuctionsManagement = () => {
 
   const fetchAuctions = async () => {
     try {
-      const data = await getAllAuctions(); // здесь API для получения всех аукционов
+      const data = await getAllAuctions();
       setAuctions(data);
     } catch (error) {
-      console.error("Помилка завантаження аукціонів", error);
+      console.error(t("admin.auctions.load_error"), error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Ви впевнені, що хочете видалити аукціон?")) {
-      await deleteAuction(id);
+  const confirmDelete = async () => {
+    if (selectedAuctionId) {
+      await deleteAuction(selectedAuctionId);
+      closeDeleteModal();
       await fetchAuctions();
     }
   };
@@ -49,16 +66,16 @@ const AllAuctionsManagement = () => {
 
   return (
     <Container className="py-4">
-      <h4 className="mb-4">Усі аукціони</h4>
+      <h4 className="mb-4">{t("admin.auctions.title")}</h4>
       <Table bordered hover responsive>
         <thead className="table-light">
           <tr>
-            <th>Назва</th>
-            <th>Опис</th>
-            <th>Початок</th>
-            <th>Кінець</th>
-            <th>Статус</th>
-            <th>Дія</th>
+            <th>{t("admin.auctions.name")}</th>
+            <th>{t("admin.auctions.description")}</th>
+            <th>{t("admin.auctions.start")}</th>
+            <th>{t("admin.auctions.end")}</th>
+            <th>{t("admin.auctions.status")}</th>
+            <th>{t("admin.auctions.action")}</th>
           </tr>
         </thead>
         <tbody>
@@ -70,36 +87,55 @@ const AllAuctionsManagement = () => {
               <td>{new Date(auction.endTime).toLocaleString()}</td>
               <td>
                 {auction.isActive ? (
-                  <span className="text-success fw-semibold">Активний</span>
+                  <span className="text-success fw-semibold">
+                    {t("admin.auctions.active")}
+                  </span>
                 ) : (
-                  <span className="text-danger fw-semibold">Заблокований</span>
+                  <span className="text-danger fw-semibold">
+                    {t("admin.auctions.blocked")}
+                  </span>
                 )}
               </td>
               <td className="d-flex gap-2">
                 <Button size="sm" variant="primary" disabled>
-                  Редагувати
+                  {t("admin.auctions.edit")}
                 </Button>
                 <Button
                   size="sm"
                   variant={auction.isActive ? "warning" : "success"}
-                  onClick={() =>
-                    handleToggleBlock(auction.id, auction.isActive)
-                  }
+                  onClick={() => handleToggleBlock(auction.id, auction.isActive)}
                 >
-                  {auction.isActive ? "Блокувати" : "Розблокувати"}
+                  {auction.isActive
+                    ? t("admin.auctions.block")
+                    : t("admin.auctions.unblock")}
                 </Button>
                 <Button
                   size="sm"
                   variant="danger"
-                  onClick={() => handleDelete(auction.id)}
+                  onClick={() => openDeleteModal(auction.id)}
                 >
-                  Видалити
+                  {t("admin.auctions.delete")}
                 </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
+
+      <Modal show={isDeleteModalOpen} onHide={closeDeleteModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{t("admin.auctions.confirm_title")}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{t("admin.auctions.confirm_delete")}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeDeleteModal}>
+            {t("admin.auctions.cancel")}
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            {t("admin.auctions.confirm")}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

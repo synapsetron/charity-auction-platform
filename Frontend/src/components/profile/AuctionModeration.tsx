@@ -14,6 +14,7 @@ import {
   deleteAuction,
 } from "../../api/adminApi";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 interface Auction {
   id: string;
@@ -28,6 +29,7 @@ interface Auction {
 
 const AuctionModeration = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [auctions, setAuctions] = useState<Auction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,7 +50,7 @@ const AuctionModeration = () => {
       const data = await getPendingAuctions();
       setAuctions(data);
     } catch (error) {
-      console.error("Помилка завантаження аукціонів", error);
+      console.error(t("moderation.load_error"), error);
     } finally {
       setLoading(false);
     }
@@ -73,8 +75,11 @@ const AuctionModeration = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (window.confirm("Ви впевнені, що хочете видалити аукціон?")) {
+  const handleDelete = async (id: string, title: string) => {
+    const confirmed = window.confirm(
+      t("moderation.confirm_delete_text", { title })
+    );
+    if (confirmed) {
       await deleteAuction(id);
       await fetchAuctions();
     }
@@ -91,22 +96,22 @@ const AuctionModeration = () => {
   if (user?.role !== "Admin") {
     return (
       <Container className="py-5 text-center">
-        <h3>У вас немає прав доступу</h3>
+        <h3>{t("moderation.access_denied")}</h3>
       </Container>
     );
   }
 
   return (
     <Container className="py-4">
-      <h4 className="mb-4">Управління аукціонами</h4>
+      <h4 className="mb-4">{t("admin.moderation.moderation_title")}</h4>
       <Table bordered hover responsive>
         <thead className="table-light">
           <tr>
-            <th>Назва</th>
-            <th>Опис</th>
-            <th>Початок</th>
-            <th>Кінець</th>
-            <th>Дія</th>
+            <th>{t("admin.auctions.name")}</th>
+            <th>{t("admin.auctions.description")}</th>
+            <th>{t("admin.auctions.start")}</th>
+            <th>{t("admin.auctions.end")}</th>
+            <th>{t("admin.auctions.action")}</th>
           </tr>
         </thead>
         <tbody>
@@ -122,21 +127,21 @@ const AuctionModeration = () => {
                   variant="success"
                   onClick={() => handleApprove(auction.id)}
                 >
-                  Підтвердити
+                  {t("admin.moderation.approve")}
                 </Button>
                 <Button
                   size="sm"
                   variant="warning"
                   onClick={() => handleOpenRejectModal(auction.id)}
                 >
-                  Відмовити
+                  {t("admin.moderation.reject")}
                 </Button>
                 <Button
                   size="sm"
                   variant="danger"
-                  onClick={() => handleDelete(auction.id)}
+                  onClick={() => handleDelete(auction.id, auction.title)}
                 >
-                  Видалити
+                  {t("admin.moderation.delete")}
                 </Button>
               </td>
             </tr>
@@ -144,39 +149,38 @@ const AuctionModeration = () => {
         </tbody>
       </Table>
 
-      {/* Reject Reason Modal */}
       <Modal
         show={showRejectModal}
         onHide={() => setShowRejectModal(false)}
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Відмовити аукціон</Modal.Title>
+          <Modal.Title>{t("moderation.reject_title")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="rejectReason">
-              <Form.Label>Причина відмови</Form.Label>
+              <Form.Label>{t("moderation.reject_reason")}</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
-                placeholder="Вкажіть причину відмови"
+                placeholder={t("moderation.reject_placeholder") || ""}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowRejectModal(false)}>
-            Скасувати
+            {t("moderation.cancel")}
           </Button>
           <Button
             variant="warning"
             onClick={handleConfirmReject}
             disabled={!rejectReason.trim()}
           >
-            Відмовити
+            {t("moderation.reject")}
           </Button>
         </Modal.Footer>
       </Modal>

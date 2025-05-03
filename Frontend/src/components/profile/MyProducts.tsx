@@ -12,11 +12,13 @@ import AuctionForm from "../auction/AuctionForm";
 import { useAuction } from "../../hooks/useAuction";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../common/Modal";
+import { useTranslation } from "react-i18next";
 
 const MyProducts = () => {
   const [auctions, setAuctions] = useState<AuctionResponseWithBidsDTO[]>([]);
   const { loading, error, fetchMyAuctions } = useAuction();
   const { isOpen, data, openModal, closeModal } = useModal<string>();
+  const { t } = useTranslation();
 
   useEffect(() => {
     loadAuctions();
@@ -27,7 +29,7 @@ const MyProducts = () => {
       const data = await fetchMyAuctions();
       setAuctions(data);
     } catch (error) {
-      console.error("Помилка при завантаженні аукціонів", error);
+      console.error(t("my_products.error"), error);
     }
   };
 
@@ -54,11 +56,11 @@ const MyProducts = () => {
 
   return (
     <Container className="py-4">
-      <h4>Мої товари</h4>
+      <h4>{t("my_products.title")}</h4>
 
       {error && (
         <Alert variant="danger" className="mb-4">
-          {error}
+          {t("my_products.error")}
         </Alert>
       )}
 
@@ -66,16 +68,16 @@ const MyProducts = () => {
         <Table bordered hover responsive className="align-middle">
           <thead className="table-light">
             <tr>
-              <th>S.N</th>
-              <th>Назва</th>
-              <th>Комісія</th>
-              <th>Стартова ціна</th>
-              <th>Кількість ставок</th>
-              <th>Зображення</th>
-              <th>Перевірено</th>
-              <th>Продано</th>
-              <th>Статус</th>
-              <th>Дії</th>
+              <th>{t("my_products.table.sn")}</th>
+              <th>{t("my_products.table.title")}</th>
+              <th>{t("my_products.table.fee")}</th>
+              <th>{t("my_products.table.start_price")}</th>
+              <th>{t("my_products.table.bids")}</th>
+              <th>{t("my_products.table.image")}</th>
+              <th>{t("my_products.table.approved")}</th>
+              <th>{t("my_products.table.sold")}</th>
+              <th>{t("my_products.table.status")}</th>
+              <th>{t("my_products.table.actions")}</th>
             </tr>
           </thead>
           <tbody>
@@ -97,13 +99,17 @@ const MyProducts = () => {
                     }}
                   />
                 </td>
-                <td>{auction.isApproved ? "Так" : "Ні"}</td>
-                <td>{auction.isSold ? "Так" : "Ні"}</td>
+                <td>{auction.isApproved ? t("my_products.table.yes") : t("my_products.table.no")}</td>
+                <td>{auction.isSold ? t("my_products.table.yes") : t("my_products.table.no")}</td>
                 <td>
                   {auction.isActive ? (
-                    <span className="text-success fw-semibold">Активний</span>
+                    <span className="text-success fw-semibold">
+                      {t("my_products.table.active")}
+                    </span>
                   ) : (
-                    <span className="text-muted fw-semibold">Завершений</span>
+                    <span className="text-muted fw-semibold">
+                      {t("my_products.table.ended")}
+                    </span>
                   )}
                 </td>
                 <td>
@@ -112,14 +118,14 @@ const MyProducts = () => {
                       variant="primary"
                       onClick={() => handleViewDetails(auction.id)}
                     >
-                      Переглянути
+                      {t("my_products.table.view")}
                     </Button>
                     <Button
                       variant="warning"
                       onClick={() => handleEditAuction(auction.id)}
                       disabled={!auction.isActive}
                     >
-                      Редагувати
+                      {t("my_products.table.edit")}
                     </Button>
                   </ButtonGroup>
                 </td>
@@ -132,7 +138,7 @@ const MyProducts = () => {
       <Modal
         isOpen={isOpen}
         onClose={handleCloseEdit}
-        title="Редагувати аукціон"
+        title={t("my_products.modal.title")}
         size="lg"
       >
         <AuctionForm auctionId={data} onClose={handleCloseEdit} />

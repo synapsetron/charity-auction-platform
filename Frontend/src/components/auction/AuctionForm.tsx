@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuction } from '../../hooks/useAuction';
 import { useForm } from '../../hooks/useForm';
 import { useNotification } from '../../hooks/useNotification';
+import { useTranslation } from 'react-i18next';
 
 type AuctionFormProps = {
   auctionId?: string;
@@ -19,20 +20,22 @@ const initialValues = {
   endTime: '',
 };
 
-const validationRules = {
-  title: (value: string) => !value ? 'Назва обов\'язкова' : null,
-  startingPrice: (value: number) => value <= 0 ? 'Ціна повинна бути більше 0' : null,
-  imageUrl: (value: string) => !value ? 'Посилання на зображення обов\'язкове' : null,
-  startTime: (value: string) => !value ? 'Дата початку обов\'язкова' : null,
-  endTime: (value: string) => !value ? 'Дата завершення обов\'язкова' : null,
-};
-
 const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isActive, setIsActive] = useState(true);
-  
+
   const { loading, error, fetchAuctionById, createNewAuction, updateExistingAuction } = useAuction();
-  const { values, errors, touched, handleChange, handleBlur, validateForm, resetForm } = useForm(initialValues, validationRules);
+  const { values, errors, touched, handleChange, handleBlur, validateForm, resetForm } = useForm(
+    initialValues,
+    {
+      title: (value: string) => !value ? t('auction_form.validation.title') : null,
+      startingPrice: (value: number) => value <= 0 ? t('auction_form.validation.starting_price') : null,
+      imageUrl: (value: string) => !value ? t('auction_form.validation.image_url') : null,
+      startTime: (value: string) => !value ? t('auction_form.validation.start_time') : null,
+      endTime: (value: string) => !value ? t('auction_form.validation.end_time') : null,
+    }
+  );
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -52,14 +55,14 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
       handleChange('endTime', new Date(auction.endTime).toISOString().slice(0, 16));
       setIsActive(auction.isActive);
     } catch (error) {
-      console.error('Помилка при завантаженні аукціону', error);
-      showNotification('error', 'Не вдалося завантажити дані аукціону');
+      console.error(t('auction_form.errors.load'), error);
+      showNotification('error', t('auction_form.errors.load'));
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -67,7 +70,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
     try {
       if (auctionId) {
         await updateExistingAuction(auctionId, { ...values, isActive });
-        showNotification('success', 'Аукціон успішно оновлено!');
+        showNotification('success', t('auction_form.notifications.updated'));
         setTimeout(() => {
           onClose ? onClose() : navigate('/my-products');
         }, 1500);
@@ -75,11 +78,11 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         await createNewAuction(values);
         resetForm();
         setIsActive(true);
-        showNotification('success', 'Аукціон успішно створено!');
+        showNotification('success', t('auction_form.notifications.created'));
       }
     } catch (error) {
-      console.error('Помилка при збереженні аукціону', error);
-      showNotification('error', 'Не вдалося зберегти аукціон. Перевірте дані та спробуйте ще раз.');
+      console.error(t('auction_form.errors.save'), error);
+      showNotification('error', t('auction_form.errors.save'));
     }
   };
 
@@ -93,17 +96,17 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
 
   return (
     <Container className="py-4">
-      <h4 className="mb-4">{auctionId ? 'Редагувати аукціон' : 'Створити новий аукціон'}</h4>
+      <h4 className="mb-4">{auctionId ? t('auction_form.edit_title') : t('auction_form.create_title')}</h4>
 
       {error && (
-        <Alert variant="danger" onClose={() => {}} dismissible>
+        <Alert variant="danger" dismissible>
           {error}
         </Alert>
       )}
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Назва *</Form.Label>
+          <Form.Label>{t('auction_form.fields.title')}</Form.Label>
           <Form.Control
             type="text"
             name="title"
@@ -118,7 +121,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Опис</Form.Label>
+          <Form.Label>{t('auction_form.fields.description')}</Form.Label>
           <Form.Control
             as="textarea"
             name="description"
@@ -129,7 +132,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Стартова ціна *</Form.Label>
+          <Form.Label>{t('auction_form.fields.starting_price')}</Form.Label>
           <Form.Control
             type="number"
             step="0.01"
@@ -145,7 +148,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Посилання на зображення *</Form.Label>
+          <Form.Label>{t('auction_form.fields.image_url')}</Form.Label>
           <Form.Control
             type="text"
             name="imageUrl"
@@ -160,7 +163,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Дата початку *</Form.Label>
+          <Form.Label>{t('auction_form.fields.start_time')}</Form.Label>
           <Form.Control
             type="datetime-local"
             name="startTime"
@@ -175,7 +178,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         </Form.Group>
 
         <Form.Group className="mb-4">
-          <Form.Label>Дата завершення *</Form.Label>
+          <Form.Label>{t('auction_form.fields.end_time')}</Form.Label>
           <Form.Control
             type="datetime-local"
             name="endTime"
@@ -190,7 +193,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          {auctionId ? 'Оновити аукціон' : 'Створити аукціон'}
+          {auctionId ? t('auction_form.update_button') : t('auction_form.create_button')}
         </Button>
       </Form>
     </Container>

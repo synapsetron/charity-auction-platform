@@ -10,9 +10,11 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
   const { stats, loading } = useStats();
+  const { t } = useTranslation();
 
   if (loading || !stats) {
     return (
@@ -26,24 +28,27 @@ const Dashboard = () => {
   const isSeller = stats.role === "Seller";
 
   const sellerCards = [
-    { label: "Balance", value: stats.balance },
-    { label: "My Wins", value: stats.myWins },
-    { label: "My Auctions", value: stats.myAuctions },
+    { label: t("dashboard.balance"), value: stats.balance },
+    { label: t("dashboard.my_wins"), value: stats.myWins },
+    { label: t("dashboard.my_auctions"), value: stats.myAuctions },
   ];
 
   const adminCards = [
-    { label: "Total Users", value: stats.userCount },
-    { label: "Total Auctions", value: stats.auctionCount },
-    { label: "Active Auctions", value: stats.activeAuctionCount },
-    { label: "Ended Auctions", value: stats.endedAuctionCount },
-    { label: "Donations", value: stats.donationCount },
-    { label: "Total Bids Sum", value: stats.totalBidAmount },
-    { label: "Average Bid", value: stats.avgBidAmount },
+    { label: t("dashboard.total_users"), value: stats.userCount },
+    { label: t("dashboard.total_auctions"), value: stats.auctionCount },
+    { label: t("dashboard.active_auctions"), value: stats.activeAuctionCount },
+    { label: t("dashboard.ended_auctions"), value: stats.endedAuctionCount },
+    { label: t("dashboard.donations"), value: stats.donationCount },
+    { label: t("dashboard.total_bids_sum"), value: stats.totalBidAmount },
+    { label: t("dashboard.average_bid"), value: stats.avgBidAmount },
   ];
 
   return (
     <Container className="py-5">
-      <h5 className="mb-4">{isAdmin ? "Admin Dashboard" : "My Activity"}</h5>
+      <h5 className="mb-4">
+        {isAdmin ? t("dashboard.admin_title") : t("dashboard.seller_title")}
+      </h5>
+
       <Row className="gy-4">
         {(isSeller ? sellerCards : adminCards).map((card, idx) => (
           <Col md={4} key={idx}>
@@ -59,7 +64,7 @@ const Dashboard = () => {
 
       {isAdmin && (stats.monthlyBids?.length ?? 0) > 0 && (
         <div className="mt-5">
-          <h5 className="mb-3">Monthly Bids Activity</h5>
+          <h5 className="mb-3">{t("dashboard.monthly_bids")}</h5>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.monthlyBids ?? []}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -76,12 +81,12 @@ const Dashboard = () => {
 
       {isAdmin && (stats.topAuctions?.length ?? 0) > 0 && (
         <div className="mt-5">
-          <h5 className="mb-3">Top Auctions</h5>
+          <h5 className="mb-3">{t("dashboard.top_auctions")}</h5>
           <Table striped bordered>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Bids</th>
+                <th>{t("dashboard.auction_name")}</th>
+                <th>{t("dashboard.bids")}</th>
               </tr>
             </thead>
             <tbody>
@@ -98,12 +103,12 @@ const Dashboard = () => {
 
       {isAdmin && (stats.topUsers?.length ?? 0) > 0 && (
         <div className="mt-5">
-          <h5 className="mb-3">Top Users</h5>
+          <h5 className="mb-3">{t("dashboard.top_users")}</h5>
           <Table striped bordered>
             <thead>
               <tr>
-                <th>User</th>
-                <th>Total Bids</th>
+                <th>{t("dashboard.user")}</th>
+                <th>{t("dashboard.total_bids")}</th>
               </tr>
             </thead>
             <tbody>

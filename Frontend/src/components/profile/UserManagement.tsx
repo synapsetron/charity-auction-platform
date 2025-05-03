@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Container, Table, Button, Spinner, Alert } from 'react-bootstrap';
 import { getAllUsers, blockUser, unblockUser, deleteUser } from '../../api/adminApi';
 import { useAuth } from '../../context/AuthContext';
+import { useModal } from '../../hooks/useModal';
+import { Modal } from '../common/Modal';
+import { useTranslation } from 'react-i18next';
 
 interface User {
   id: string;
@@ -14,71 +17,76 @@ interface User {
 
 const UserManagement = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const {
+    isOpen: isDeleteModalOpen,
+    data: selectedUser,
+    openModal: openDeleteModal,
+    closeModal: closeDeleteModal,
+  } = useModal<User | null>();
 
-  // Завантаження користувачів при завантаженні сторінки
   useEffect(() => {
     if (user?.role === 'Admin') {
       fetchUsers();
     }
   }, [user]);
 
-  // Отримання всіх користувачів
   const fetchUsers = async () => {
     try {
       const data = await getAllUsers();
       setUsers(data);
     } catch (err) {
-      console.error('Помилка при завантаженні користувачів', err);
-      setError('Не вдалося завантажити користувачів.');
+      console.error(t('user_management.errors.load'), err);
+      setError(t('user_management.errors.load'));
     } finally {
       setLoading(false);
     }
   };
 
-  // Блокування користувача
   const handleBlock = async (id: string) => {
     try {
       await blockUser(id);
-      await fetchUsers(); // Перезапитати після блокування
+      await fetchUsers();
     } catch (err) {
-      console.error('Помилка при блокуванні', err);
-      setError('Не вдалося заблокувати користувача.');
+      console.error(t('user_management.errors.block'), err);
+      setError(t('user_management.errors.block'));
     }
   };
 
-  // Розблокування користувача
   const handleUnblock = async (id: string) => {
     try {
       await unblockUser(id);
-      await fetchUsers(); // Перезапитати після розблокування
+      await fetchUsers();
     } catch (err) {
-      console.error('Помилка при розблокуванні', err);
-      setError('Не вдалося розблокувати користувача.');
+      console.error(t('user_management.errors.unblock'), err);
+      setError(t('user_management.errors.unblock'));
     }
   };
 
-  // Видалення користувача
-  const handleDelete = async (id: string) => {
-    if (window.confirm('Ви впевнені, що хочете видалити користувача?')) {
-      try {
-        await deleteUser(id);
-        await fetchUsers();
-      } catch (err) {
-        console.error('Помилка при видаленні', err);
-        setError('Не вдалося видалити користувача.');
-      }
+  const confirmDelete = (user: User) => {
+    openDeleteModal(user);
+  };
+
+  const handleDelete = async () => {
+    if (!selectedUser) return;
+    try {
+      await deleteUser(selectedUser.id);
+      await fetchUsers();
+    } catch (err) {
+      console.error(t('user_management.errors.delete'), err);
+      setError(t('user_management.errors.delete'));
+    } finally {
+      closeDeleteModal();
     }
   };
 
-  // Перевірка чи користувач заблокований
   const isUserBlocked = (lockoutEnd: string | null) => {
     return lockoutEnd ? new Date(lockoutEnd) > new Date() : false;
   };
 
-  // Показати спіннер при завантаженні
   if (loading) {
     return (
       <Container className="py-5 text-center">
@@ -87,32 +95,30 @@ const UserManagement = () => {
     );
   }
 
-  // Якщо не адмін — заборона доступу
   if (user?.role !== 'Admin') {
     return (
       <Container className="py-5 text-center">
-        <h3>У вас немає прав доступу</h3>
+        <h3>{t('user_management.access_denied')}</h3>
       </Container>
     );
   }
 
   return (
     <Container className="py-4">
-      <h4 className="mb-4">Управління користувачами</h4>
+      <h4 className="mb-4">{t('user_management.title')}</h4>
 
       {error && <Alert variant="danger">{error}</Alert>}
 
-      {/* Обгортка для скролу */}
       <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
         <Table bordered hover responsive>
           <thead className="table-light">
             <tr>
-              <th>Ім'я</th>
-              <th>Прізвище</th>
-              <th>Email</th>
-              <th>Роль</th>
-              <th>Статус</th>
-              <th>Дії</th>
+              <th>{t('user_management.table.first_name')}</th>
+              <th>{t('user_management.table.last_name')}</th>
+              <th>{t('user_management.table.email')}</th>
+              <th>{t('user_management.table.role')}</th>
+              <th>{t('user_management.table.status')}</th>
+              <th>{t('user_management.table.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -126,23 +132,23 @@ const UserManagement = () => {
                   <td>{u.role}</td>
                   <td>
                     {blocked ? (
-                      <span className="text-danger fw-bold">Заблокований</span>
+                      <span className="text-danger fw-bold">{t('user_management.blocked')}</span>
                     ) : (
-                      <span className="text-success fw-bold">Активний</span>
+                      <span className="text-success fw-bold">{t('user_management.active')}</span>
                     )}
                   </td>
                   <td className="d-flex gap-2">
                     {blocked ? (
                       <Button size="sm" variant="success" onClick={() => handleUnblock(u.id)}>
-                        Розблокувати
+                        {t('user_management.unblock')}
                       </Button>
                     ) : (
                       <Button size="sm" variant="warning" onClick={() => handleBlock(u.id)}>
-                        Заблокувати
+                        {t('user_management.block')}
                       </Button>
                     )}
-                    <Button size="sm" variant="danger" onClick={() => handleDelete(u.id)}>
-                      Видалити
+                    <Button size="sm" variant="danger" onClick={() => confirmDelete(u)}>
+                      {t('user_management.delete')}
                     </Button>
                   </td>
                 </tr>
@@ -151,6 +157,22 @@ const UserManagement = () => {
           </tbody>
         </Table>
       </div>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        title={t('user_management.confirm_delete_title')}
+        confirmText={t('user_management.confirm')}
+        cancelText={t('user_management.cancel')}
+        showFooter
+        onConfirm={handleDelete}
+      >
+        <p>
+          {t('user_management.confirm_delete_text', {
+            name: `${selectedUser?.firstName} ${selectedUser?.lastName}`,
+          })}
+        </p>
+      </Modal>
     </Container>
   );
 };

@@ -1,11 +1,12 @@
 import { Form, Button } from 'react-bootstrap';
-import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import { FaFacebook } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { loginUser, googleLoginUser } from '../../api/auth'; // подключаем googleLoginUser
+import { loginUser, googleLoginUser } from '../../api/auth';
 import { useAuth } from '../../context/AuthContext';
-import { GoogleLogin } from '@react-oauth/google'; // добавляем GoogleLogin
-
+import { GoogleLogin } from '@react-oauth/google';
+import { useTranslation } from 'react-i18next';
+import i18n from '../../i18n';
 interface LoginFormProps {
   onForgotPassword: () => void;
 }
@@ -13,6 +14,7 @@ interface LoginFormProps {
 const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
   const { setUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,14 +24,13 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
     e.preventDefault();
     try {
       const loggedUser = await loginUser({ email, password });
-      setUser(loggedUser); // тут просто инфу сохраняем
+      setUser(loggedUser);
       navigate('/profile/dashboard');
     } catch (error: any) {
       const backendMessage = error.response?.data?.message;
-      setErrorMessage(backendMessage || 'Помилка входу');
+      setErrorMessage(backendMessage || t('login.errors.login'));
     }
   };
-  
 
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
     try {
@@ -40,29 +41,29 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
       }
     } catch (error: any) {
       const backendMessage = error.response?.data?.message;
-      setErrorMessage(backendMessage || 'Помилка входу через Google');
+      setErrorMessage(backendMessage || t('login.errors.google'));
     }
   };
 
   const handleGoogleLoginError = () => {
-    setErrorMessage('Помилка під час входу через Google');
+    setErrorMessage(t('login.errors.google_fail'));
   };
 
   return (
     <div className="bg-white p-4 rounded shadow">
       <div className="text-center mb-4">
-        <h5>Новий користувач</h5>
+        <h5>{t('login.new_user')}</h5>
         <p className="mt-2">
-          Ще не маєш акаунту? <Link to="/register">Зареєструйся тут</Link>
+          {t('login.no_account')} <Link to="/register">{t('login.register_here')}</Link>
         </p>
       </div>
 
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="formEmail">
-          <Form.Label>Введіть Email *</Form.Label>
+          <Form.Label>{t('login.email_label')}</Form.Label>
           <Form.Control
             type="email"
-            placeholder="Email"
+            placeholder={t('login.email_placeholder')}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -70,10 +71,10 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formPassword">
-          <Form.Label>Пароль *</Form.Label>
+          <Form.Label>{t('login.password_label')}</Form.Label>
           <Form.Control
             type="password"
-            placeholder="Пароль"
+            placeholder={t('login.password_placeholder')}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -85,35 +86,29 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
         )}
 
         <Button type="submit" variant="success" className="w-100 rounded-0 mb-3">
-          Увійти
+          {t('login.login_button')}
         </Button>
 
         <div className="text-center">
           <Button variant="link" className="text-success p-0" onClick={onForgotPassword}>
-            Забули пароль?
+            {t('login.forgot_password')}
           </Button>
         </div>
       </Form>
 
       <div className="text-center border rounded p-3 mt-4">
-        <h6 className="mb-3">АБО УВІЙТИ ЧЕРЕЗ</h6>
+        <h6 className="mb-3">{t('login.or_login_with')}</h6>
         <div className="d-flex justify-content-center gap-3">
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
             onError={handleGoogleLoginError}
             useOneTap
           />
-          {/* Фейсбук можно будет потом прикрутить */}
-          {/* <Button variant="primary" className="d-flex align-items-center gap-2">
-            <FaFacebook /> Facebook
-          </Button> */}
         </div>
       </div>
 
       <p className="text-center mt-4">
-        Натискаючи кнопку входу, ви погоджуєтесь з
-        <span className="text-success text-decoration-underline mx-1">умовами</span> та
-        <span className="text-success text-decoration-underline ms-1">політикою конфіденційності</span>.
+        {t('login.agree_text')} <span className="text-success text-decoration-underline mx-1">{t('login.terms')}</span> {t('login.and')} <span className="text-success text-decoration-underline ms-1">{t('login.privacy')}</span>.
       </p>
     </div>
   );

@@ -60,138 +60,356 @@
     "join_us_desc": "You can be part of a great mission — do a good deed that changes history. Together we are strong!"
   },
   "blogpage": {
-  "title": "Latest News & Stories",
-  "read_more": "Read More",
-  "load_more": "Load More"
-},
-"servicespage": {
-  "title": "What We Offer",
-  "services": [
-    {
-      "title": "Auction Management",
-      "desc": "Easily list and manage auctions for both digital and physical items. Schedule start and end times, set reserve prices, and control approval flows."
-    },
-    {
-      "title": "User Engagement",
-      "desc": "Boost participation with real-time bidding updates, notification alerts, and personalized experiences tailored to each bidder."
-    },
-    {
-      "title": "Analytics & Reports",
-      "desc": "Track user behavior, bid frequency, donation history and more with powerful real-time analytics and custom dashboards."
-    },
-    {
-      "title": "Performance Optimization",
-      "desc": "Built for scale — lightning-fast performance with server-side rendering, caching, and CDN delivery to ensure the best UX."
-    },
-    {
-      "title": "Community Building",
-      "desc": "Create a loyal user base with leaderboards, donation streaks, trust scores, and gamification to drive interaction and cause impact."
-    },
-    {
-      "title": "Security & Privacy",
-      "desc": "State-of-the-art security including two-factor authentication, end-to-end encryption, audit logs, and GDPR compliance."
-    }
-  ],
-  "cta_title": "Ready to get started?",
-  "cta_text": "Let us help you launch your own charity auction platform with ease and confidence.",
-  "cta_button": "Contact Our Team"
-},
-"registerpage": {
-  "title": "Register",
-  "breadcrumb_home": "Home",
-  "breadcrumb_register": "Register",
-  "already_have_account": "Already have an account?",
-  "login_link": "Login",
-  "form": {
-    "first_name": "First Name *",
-    "last_name": "Last Name *",
-    "email": "Email *",
-    "password": "Password *",
-    "confirm_password": "Confirm Password *",
-    "placeholder_first_name": "Enter first name",
-    "placeholder_last_name": "Enter last name",
-    "placeholder_email": "Enter email",
-    "placeholder_password": "Enter password",
-    "placeholder_confirm_password": "Repeat password"
+    "title": "Latest News & Stories",
+    "read_more": "Read More",
+    "load_more": "Load More"
   },
-  "submit": "Create Account",
-  "submitting": "Creating Account...",
-  "error_passwords_mismatch": "Passwords do not match",
-  "terms_text": "By clicking register, you agree to the",
-  "terms": "terms",
-  "privacy": "privacy policy"
-},
-"loginpage": {
-  "title_login": "Login",
-  "title_reset": "Password Recovery",
-  "breadcrumb_home": "Home",
-  "breadcrumb_login": "Login",
-  "breadcrumb_reset": "Recovery"
-},
-"profilepage": {
-  "not_found": "User not found. Please log in.",
-  "title_name": "First Name",
-  "title_lastname": "Last Name",
-  "title_email": "Email",
-  "title_role": "Role",
-  "title_old_password": "Old Password",
-  "title_new_password": "New Password",
-  "email_tooltip": "Email cannot be changed",
-  "submit_button": "Update Profile",
-  "success_toast": "Profile updated successfully!",
-  "error_same_password": "New password cannot be the same as old",
-  "error_update": "Failed to update profile"
-},
-"contactpage": {
-  "title": "Get in Touch With Us",
-  "subtitle": "Have a question or just want to say hello? We'd love to hear from you!",
-  "form_title": "Send Us a Message",
-  "name_label": "Your Name",
-  "email_label": "Your Email",
-  "message_label": "Your Message",
-  "submit_button": "Send Message",
-  "contact_title": "Reach Us Directly",
-  "address_heading": "Kyiv, Ukraine",
-  "address_text": "Independence Square 1, Office 12",
-  "phone_heading": "+380 99 999 99 99",
-  "phone_text": "Call us Mon–Fri, 10am–6pm",
-  "email_heading": "support@dobro.bid",
-  "email_text": "We reply within 1 business day"
-},
-"auctionslist": {
-  "title": "Explore Our Auctions",
-  "subtitle": "Discover exclusive items and support a great cause — every bid matters.",
-  "search_placeholder": "Search auctions...",
-  "no_results": "No auctions found matching your search."
-},
-"auctiondetails": {
-  "loading": "Loading...",
-  "item_condition": "Item condition:",
-  "item_verified": "Item verified:",
-  "new": "New",
-  "no": "No",
-  "time_left": "Time left",
-  "auction_ended": "Auction Ended",
-  "auction_ends": "Auction ends:",
-  "timezone": "Timezone: UTC 0",
-  "price": "Price:",
-  "current_bid": "Current Bid:",
-  "you_won": "🎉 You have won the auction!",
-  "pay_now": "Pay Now",
-  "place_bid": "Place Bid",
-  "donate_bid": "Donate your Bid",
-  "total_raised": "Total Raised:",
-  "tab_description": "Description",
-  "tab_history": "Auction History",
-  "tab_reviews": "Reviews(2)",
-  "tab_products": "More Products",
-  "no_bids": "No bids yet",
-  "reviews_placeholder": "No reviews yet. Be the first to review!",
-  "more_coming": "Other products coming soon..."
-}
-
-
-
-
-
+  "servicespage": {
+    "title": "What We Offer",
+    "services": [
+      {
+        "title": "Auction Management",
+        "desc": "Easily list and manage auctions for both digital and physical items. Schedule start and end times, set reserve prices, and control approval flows."
+      },
+      {
+        "title": "User Engagement",
+        "desc": "Boost participation with real-time bidding updates, notification alerts, and personalized experiences tailored to each bidder."
+      },
+      {
+        "title": "Analytics & Reports",
+        "desc": "Track user behavior, bid frequency, donation history and more with powerful real-time analytics and custom dashboards."
+      },
+      {
+        "title": "Performance Optimization",
+        "desc": "Built for scale — lightning-fast performance with server-side rendering, caching, and CDN delivery to ensure the best UX."
+      },
+      {
+        "title": "Community Building",
+        "desc": "Create a loyal user base with leaderboards, donation streaks, trust scores, and gamification to drive interaction and cause impact."
+      },
+      {
+        "title": "Security & Privacy",
+        "desc": "State-of-the-art security including two-factor authentication, end-to-end encryption, audit logs, and GDPR compliance."
+      }
+    ],
+    "cta_title": "Ready to get started?",
+    "cta_text": "Let us help you launch your own charity auction platform with ease and confidence.",
+    "cta_button": "Contact Our Team"
+  },
+  "registerpage": {
+    "title": "Register",
+    "breadcrumb_home": "Home",
+    "breadcrumb_register": "Register",
+    "already_have_account": "Already have an account?",
+    "login_link": "Login",
+    "form": {
+      "first_name": "First Name *",
+      "last_name": "Last Name *",
+      "email": "Email *",
+      "password": "Password *",
+      "confirm_password": "Confirm Password *",
+      "placeholder_first_name": "Enter first name",
+      "placeholder_last_name": "Enter last name",
+      "placeholder_email": "Enter email",
+      "placeholder_password": "Enter password",
+      "placeholder_confirm_password": "Repeat password"
+    },
+    "submit": "Create Account",
+    "submitting": "Creating Account...",
+    "error_passwords_mismatch": "Passwords do not match",
+    "terms_text": "By clicking register, you agree to the",
+    "terms": "terms",
+    "privacy": "privacy policy"
+  },
+  "loginpage": {
+    "title_login": "Login",
+    "title_reset": "Password Recovery",
+    "breadcrumb_home": "Home",
+    "breadcrumb_login": "Login",
+    "breadcrumb_reset": "Recovery"
+  },
+  "profilepage": {
+    "not_found": "User not found. Please log in.",
+    "title_name": "First Name",
+    "title_lastname": "Last Name",
+    "title_email": "Email",
+    "title_role": "Role",
+    "title_old_password": "Old Password",
+    "title_new_password": "New Password",
+    "email_tooltip": "Email cannot be changed",
+    "submit_button": "Update Profile",
+    "success_toast": "Profile updated successfully!",
+    "error_same_password": "New password cannot be the same as old",
+    "error_update": "Failed to update profile"
+  },
+  "contactpage": {
+    "title": "Get in Touch With Us",
+    "subtitle": "Have a question or just want to say hello? We'd love to hear from you!",
+    "form_title": "Send Us a Message",
+    "name_label": "Your Name",
+    "email_label": "Your Email",
+    "message_label": "Your Message",
+    "submit_button": "Send Message",
+    "contact_title": "Reach Us Directly",
+    "address_heading": "Kyiv, Ukraine",
+    "address_text": "Independence Square 1, Office 12",
+    "phone_heading": "+380 99 999 99 99",
+    "phone_text": "Call us Mon–Fri, 10am–6pm",
+    "email_heading": "support@dobro.bid",
+    "email_text": "We reply within 1 business day"
+  },
+  "auctionslist": {
+    "title": "Explore Our Auctions",
+    "subtitle": "Discover exclusive items and support a great cause — every bid matters.",
+    "search_placeholder": "Search auctions...",
+    "no_results": "No auctions found matching your search."
+  },
+  "auctiondetails": {
+    "loading": "Loading...",
+    "item_condition": "Item condition:",
+    "item_verified": "Item verified:",
+    "new": "New",
+    "no": "No",
+    "time_left": "Time left",
+    "auction_ended": "Auction Ended",
+    "auction_ends": "Auction ends:",
+    "timezone": "Timezone: UTC 0",
+    "price": "Price:",
+    "current_bid": "Current Bid:",
+    "you_won": "🎉 You have won the auction!",
+    "pay_now": "Pay Now",
+    "place_bid": "Place Bid",
+    "donate_bid": "Donate your Bid",
+    "total_raised": "Total Raised:",
+    "tab_description": "Description",
+    "tab_history": "Auction History",
+    "tab_reviews": "Reviews(2)",
+    "tab_products": "More Products",
+    "no_bids": "No bids yet",
+    "reviews_placeholder": "No reviews yet. Be the first to review!",
+    "more_coming": "Other products coming soon..."
+  },
+  "payment": {
+    "success_title": "🎉 Payment Successful",
+    "success_message": "Thank you for your donation! Status:",
+    "status_paid": "paid",
+    "back_to_auctions": "Back to Auctions",
+    "fail_title": "❌ Payment Failed",
+    "fail_message": "Something went wrong. Please try again or contact support.",
+    "contact_support": "Contact Support"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "tabs": {
+      "moderation": "Auction Moderation",
+      "all_auctions": "All Auctions",
+      "users": "Users"
+    },
+    "auctions": {
+      "title": "All Auctions",
+      "name": "Name",
+      "description": "Description",
+      "start": "Start Time",
+      "end": "End Time",
+      "status": "Status",
+      "action": "Action",
+      "edit": "Edit",
+      "block": "Block",
+      "unblock": "Unblock",
+      "delete": "Delete",
+      "active": "Active",
+      "blocked": "Blocked",
+      "load_error": "Error loading auctions",
+      "confirm_title": "Delete Confirmation",
+      "confirm_delete": "Are you sure you want to delete this auction?",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "moderation": {
+      "title": "Auction Moderation",
+      "moderation_title": "Pending Auctions",
+      "approve": "Approve",
+      "reject": "Reject",
+      "delete": "Delete",
+      "cancel": "Cancel",
+      "reject_title": "Reject Auction",
+      "reject_reason": "Rejection Reason",
+      "reject_placeholder": "Enter the reason for rejection",
+      "confirm_delete_title": "Confirm Deletion",
+      "confirm_delete_text": "Are you sure you want to delete the auction \"{{title}}\"?",
+      "access_denied": "You do not have access rights",
+      "load_error": "Error loading auctions"
+    }
+  },
+  "dashboard": {
+    "admin_title": "Admin Dashboard",
+    "seller_title": "My Activity",
+    "balance": "Balance",
+    "my_wins": "My Wins",
+    "my_auctions": "My Auctions",
+    "total_users": "Total Users",
+    "total_auctions": "Total Auctions",
+    "active_auctions": "Active Auctions",
+    "ended_auctions": "Ended Auctions",
+    "donations": "Donations",
+    "total_bids_sum": "Total Bids Sum",
+    "average_bid": "Average Bid",
+    "monthly_bids": "Monthly Bids Activity",
+    "top_auctions": "Top Auctions",
+    "auction_name": "Name",
+    "bids": "Bids",
+    "top_users": "Top Users",
+    "user": "User",
+    "total_bids": "Total Bids"
+  },
+  "my_bids": {
+    "title": "My Bids",
+    "no_bids": "You haven't participated in any auctions yet.",
+    "amount": "Amount",
+    "date": "Bid Date",
+    "status": "Status",
+    "pending": "Pending",
+    "won": "Won",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "lost": "Lost",
+    "go_to_auction": "Go to Auction",
+    "pay": "Pay",
+    "donated": "Donation Confirmed",
+    "donate": "Donate {{amount}} UAH",
+    "remove": "Remove from list",
+    "error_load": "Failed to load bids.",
+    "error_donate": "Error attempting to donate.",
+    "UAH": "UAH"
+  },
+  "my_products": {
+    "title": "My Products",
+    "error": "Failed to load auctions.",
+    "table": {
+      "sn": "S.N",
+      "title": "Title",
+      "fee": "Commission",
+      "start_price": "Starting Price",
+      "bids": "Bid Count",
+      "image": "Image",
+      "approved": "Approved",
+      "sold": "Sold",
+      "status": "Status",
+      "actions": "Actions",
+      "yes": "Yes",
+      "no": "No",
+      "active": "Active",
+      "ended": "Ended",
+      "view": "View",
+      "edit": "Edit"
+    },
+    "modal": {
+      "title": "Edit Auction"
+    }
+  },
+  "profile": {
+    "not_found": "User not found. Login required.",
+    "logout": "Logout",
+    "nav": {
+      "dashboard": "Dashboard",
+      "my_bids": "My Bids",
+      "favorites": "Favorites",
+      "profile": "Profile",
+      "admin_panel": "Admin Panel",
+      "my_products": "My Products",
+      "add_product": "Add Product"
+    }
+  },
+  "user_management": {
+    "title": "User Management",
+    "access_denied": "You do not have access rights.",
+    "active": "Active",
+    "blocked": "Blocked",
+    "block": "Block",
+    "unblock": "Unblock",
+    "delete": "Delete",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "confirm_delete_title": "Confirm Deletion",
+    "confirm_delete_text": "Are you sure you want to delete the user \"{{name}}\"?",
+    "table": {
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "errors": {
+      "load": "Failed to load users.",
+      "block": "Failed to block user.",
+      "unblock": "Failed to unblock user.",
+      "delete": "Failed to delete user."
+    }
+  },
+  "login": {
+    "new_user": "New User",
+    "no_account": "Don't have an account?",
+    "register_here": "Register here",
+    "email_label": "Enter Email *",
+    "email_placeholder": "Email",
+    "login_button": "Login",
+    "password_label": "Password *",
+    "password_placeholder": "Password",
+    "forgot_password": "Forgot your password?",
+    "or_login_with": "OR LOGIN WITH",
+    "login_error": "Login error",
+    "google_error": "Google login failed",
+    "agree_text": "By clicking login, you agree to the",
+    "and": "and",
+    "terms": "terms",
+    "privacy": "privacy policy"
+  },
+  "reset": {
+    "title": "Password Recovery",
+    "email_label": "Enter Email *",
+    "email_placeholder": "Email",
+    "success": "A reset email has been sent to your inbox!",
+    "error": "An error occurred",
+    "submit": "Reset",
+    "back_to_login": "Back to login"
+  },
+  "auction_card": {
+    "active": "Active",
+    "bid": "Bid",
+    "bids": "Bids",
+    "current_bid": "Current Bid",
+    "buy_now": "Buy Now",
+    "place_bid": "Place Bid",
+    "add_to_favorites": "Add to Favorites"
+  },
+  "auction_form": {
+    "create_title": "Create New Auction",
+    "edit_title": "Edit Auction",
+    "create_button": "Create Auction",
+    "update_button": "Update Auction",
+    "fields": {
+      "title": "Title *",
+      "description": "Description",
+      "starting_price": "Starting Price *",
+      "image_url": "Image URL *",
+      "start_time": "Start Time *",
+      "end_time": "End Time *"
+    },
+    "validation": {
+      "title": "Title is required",
+      "starting_price": "Starting price must be greater than 0",
+      "image_url": "Image URL is required",
+      "start_time": "Start time is required",
+      "end_time": "End time is required"
+    },
+    "notifications": {
+      "created": "Auction created successfully!",
+      "updated": "Auction updated successfully!"
+    },
+    "errors": {
+      "load": "Failed to load auction data",
+      "save": "Failed to save the auction. Please check your input and try again."
+    }
+  }
 }

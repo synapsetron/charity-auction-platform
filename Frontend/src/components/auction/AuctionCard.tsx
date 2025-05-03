@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { AuctionResponseWithBidsDTO } from "../../types/auctionTypes";
 import { FaGavel, FaMoneyBillWave, FaHeart, FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface AuctionCardProps {
   auction: AuctionResponseWithBidsDTO;
 }
 
 export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
+  const { t } = useTranslation();
   const bidsCount = auction.bids.length;
   const currentBid =
     bidsCount > 0
@@ -49,13 +51,13 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
             bg="success"
             className="position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill shadow-sm"
           >
-            <FaCheckCircle className="me-1 mb-1" /> Active
+            <FaCheckCircle className="me-1 mb-1" /> {t("auction_card.active")}
           </Badge>
           <Badge
             bg="primary"
             className="position-absolute top-0 end-0 m-2 px-3 py-1 rounded-pill shadow-sm"
           >
-            {bidsCount} {bidsCount === 1 ? "Bid" : "Bids"}
+            {bidsCount} {bidsCount === 1 ? t("auction_card.bid") : t("auction_card.bids")}
           </Badge>
         </div>
 
@@ -68,13 +70,13 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
             <div>
               <FaGavel className="text-success mb-1" />
               <div className="fw-bold text-success">${currentBid.toFixed(2)}</div>
-              <small className="text-muted">Current Bid</small>
+              <small className="text-muted">{t("auction_card.current_bid")}</small>
             </div>
             <div className="border-start" style={{ height: "50px" }}></div>
             <div>
               <FaMoneyBillWave className="text-danger mb-1" />
               <div className="fw-bold text-danger">${buyNowPrice.toFixed(2)}</div>
-              <small className="text-muted">Buy Now</small>
+              <small className="text-muted">{t("auction_card.buy_now")}</small>
             </div>
           </div>
 
@@ -85,11 +87,11 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
               variant="success"
               className="w-100 me-2 rounded-pill fw-semibold"
             >
-              Place Bid
+              {t("auction_card.place_bid")}
             </Button>
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>Add to Favorites</Tooltip>}
+              overlay={<Tooltip>{t("auction_card.add_to_favorites")}</Tooltip>}
             >
               <Button variant="light" className="rounded-circle p-2 shadow-sm">
                 <FaHeart className="text-danger" />
