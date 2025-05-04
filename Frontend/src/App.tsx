@@ -11,8 +11,8 @@ import PaymentFailPage from "./pages/payment/PaymentFailPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AuctionsListPage from "./pages/AuctionsListPage"; // Переименовал тут!
-import AuctionDetailsPage from "./pages/AuctionDetailsPage"; // <-- ДЕТАЛИ АУКЦИОНА
+import AuctionsListPage from "./pages/AuctionsListPage";
+import AuctionDetailsPage from "./pages/AuctionDetailsPage";
 import BlogPage from "./pages/BlogPage";
 import ServicesPage from "./pages/ServicesPage";
 import ContactPage from "./pages/ContactPage";
@@ -25,8 +25,8 @@ import AdminPanel from "./components/profile/AdminPanel";
 import AuctionForm from "components/auction/AuctionForm";
 import { AuthProvider } from "./context/AuthContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import MyBidsPage from './components/profile/MyBidsPage'
-import { NotificationContainer } from './components/common/NotificationContainer';
+import MyBidsPage from "./components/profile/MyBidsPage";
+import { NotificationContainer } from "./components/common/NotificationContainer";
 import "./i18n";
 
 const App = () => {
@@ -44,28 +44,23 @@ const App = () => {
             <Header />
             <main style={{ flex: 1 }}>
               <Routes>
-                {/* Публичные страницы */}
+                {/* Public pages */}
                 <Route path="/" element={<HomePage />} />
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/auctions" element={<AuctionsListPage />} />{" "}
-                {/* <-- Страница всех аукционов */}
-                <Route
-                  path="/auction/:id"
-                  element={<AuctionDetailsPage />}
-                />{" "}
-                {/* <-- Страница деталей аукциона */}.
+                <Route path="/auction/:id" element={<AuctionDetailsPage />} />{" "}
                 <Route path="/blog" element={<BlogPage />} />
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/about" element ={<AboutPage />} />
+                <Route path="/about" element={<AboutPage />} />
                 <Route
                   path="/payment/success"
                   element={<PaymentSuccessPage />}
                 />
                 <Route path="/payment/fail" element={<PaymentFailPage />} />
-                {/* Профиль */}
+                {/* Profile */}
                 <Route path="/profile" element={<ProfileLayout />}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<Dashboard />} />
@@ -74,7 +69,10 @@ const App = () => {
                   <Route path="/profile/admin-panel" element={<AdminPanel />} />
                   <Route path="my-products" element={<MyProducts />} />
                   <Route path="add-product" element={<AuctionForm />} />
-                  <Route path="/profile/winning-bids" element={<MyBidsPage />} />
+                  <Route
+                    path="/profile/winning-bids"
+                    element={<MyBidsPage />}
+                  />
                 </Route>
                 <Route path="*" element={<div>404 Not Found</div>} />
               </Routes>
