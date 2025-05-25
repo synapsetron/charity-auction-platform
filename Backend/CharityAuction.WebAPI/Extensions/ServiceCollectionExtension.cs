@@ -49,6 +49,7 @@ namespace CharityAuction.WebAPI.Extensions
         public static void AddCustomServices(this IServiceCollection services)
         {
             services.AddRepositoryServices();
+            services.AddHttpClient();
             services.AddScoped<ILoggerService, LoggerService>();
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<ITokenService, TokenService>();
@@ -62,9 +63,11 @@ namespace CharityAuction.WebAPI.Extensions
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<INotificationSender, NotificationSender>();
             services.AddScoped<IAdminService, AdminService>();
-            services.AddScoped<IPaymentService, LiqPayService>();
             services.AddScoped<IStatsService, StatsService>();
             services.AddHttpClient<IFacebookAuthService, FacebookAuthService>();
+            services.AddScoped<IPaymentService, FondyPaymentService>();
+            services.AddScoped<IPaymentService, LiqPayService>();
+            services.AddScoped<IPaymentServiceStrategy, PaymentServiceStrategy>();
             var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             services.AddAutoMapper(currentAssemblies);
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(currentAssemblies));
@@ -82,6 +85,7 @@ namespace CharityAuction.WebAPI.Extensions
             services.Configure<JwtSettingsOptions>(configuration.GetSection(JwtSettingsOptions.SectionName));
             services.Configure<EmailSettingsOptions>(configuration.GetSection(EmailSettingsOptions.SectionName));
             services.Configure<LiqPayOptions> (configuration.GetSection(LiqPayOptions.SectionName));
+            services.Configure<FondyPayOptions>(configuration.GetSection(FondyPayOptions.SectionName));
 
             services.AddDbContext<ApplicationDbContext>((provider, options) =>
             {

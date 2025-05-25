@@ -6,12 +6,33 @@ import { useTranslation } from "react-i18next";
 const blogPosts = Array.from({ length: 12 }).map((_, i) => ({
   id: i + 1,
   title: `Inspiring Mission #${i + 1}`,
-  excerpt: `Discover the story behind our ${i % 2 === 0 ? "veterans" : "volunteers"} who are using digital auctions to drive real impact in their communities...`,
+  excerpt: `Discover the story behind our ${
+    i % 2 === 0 ? "veterans" : "volunteers"
+  } who are using digital auctions to drive real impact in their communities...`,
   author: `Admin`,
   date: `2025-05-${(i % 28) + 1}`,
   category: i % 2 === 0 ? "Fundraising" : "Awareness",
   image: `https://picsum.photos/seed/blog${i + 1}/600/300`,
 }));
+
+const handleTestPayment = async () => {
+  try {
+    const res = await fetch("http://localhost:5000/api/payment/fondy/test", {
+      method: "POST",
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window.open(data.url, "_blank");
+    } else {
+      alert("URL оплаты не получен");
+    }
+  } catch (err) {
+    console.error("Ошибка оплаты:", err);
+    alert("Ошибка при создании оплаты");
+  }
+};
 
 const BlogPage = () => {
   const [visiblePosts, setVisiblePosts] = useState(6);
@@ -64,6 +85,10 @@ const BlogPage = () => {
           </Button>
         </div>
       )}
+
+      <Button variant="primary" onClick={handleTestPayment}>
+        Тестовая оплата Fondy
+      </Button>
     </Container>
   );
 };
