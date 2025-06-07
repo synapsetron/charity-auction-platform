@@ -50,10 +50,10 @@ namespace CharityAuction.Application.Services
                 throw new InvalidOperationException("Auction not found or inactive.");
             }
 
-            var highestBid = await _repository.BidRepository
+            var highestBid = _repository.BidRepository
                 .FindAll(b => b.AuctionId == request.AuctionId)
                 .OrderByDescending(b => b.Amount)
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
 
             var minimumAmount = highestBid != null ? highestBid.Amount + 1 : auction.StartingPrice;
             if (request.Amount < minimumAmount)
