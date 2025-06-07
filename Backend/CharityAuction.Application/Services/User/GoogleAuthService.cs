@@ -4,23 +4,31 @@ using Microsoft.Extensions.Logging;
 using CharityAuction.Domain.Entities;
 using CharityAuction.Application.Interfaces.User;
 using CharityAuction.Application.DTO.User;
+using CharityAuction.Application.Interfaces;
 
 public class GoogleAuthService : IGoogleAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITokenService _tokenService;
     private readonly ILogger<GoogleAuthService> _logger;
+    private readonly IGoogleTokenValidator _tokenValidator;
 
-    public GoogleAuthService(UserManager<ApplicationUser> userManager, ITokenService tokenService, ILogger<GoogleAuthService> logger)
+    public GoogleAuthService(
+        UserManager<ApplicationUser> userManager,
+        ITokenService tokenService,
+        ILogger<GoogleAuthService> logger,
+        IGoogleTokenValidator tokenValidator)
     {
         _userManager = userManager;
         _tokenService = tokenService;
         _logger = logger;
+        _tokenValidator = tokenValidator;
     }
+
 
     public async Task<UserResponseDTO> LoginWithGoogleAsync(string idToken)
     {
-        var payload = await GoogleJsonWebSignature.ValidateAsync(idToken);
+        var payload = await _tokenValidator.ValidateAsync(idToken);
 
         var user = await _userManager.FindByEmailAsync(payload.Email);
         if (user == null)

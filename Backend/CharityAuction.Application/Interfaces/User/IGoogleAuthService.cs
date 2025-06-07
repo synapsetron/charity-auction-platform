@@ -14,6 +14,6 @@ namespace CharityAuction.Application.Interfaces.User
         /// <returns>
         /// A <see cref="UserResponseDTO"/> containing information about the authenticated user.
         /// </returns>
-        Task<UserResponseDTO> LoginWithGoogleAsync(string idToken);
+        public Task<UserResponseDTO> LoginWithGoogleAsync(string idToken);
     }
 }
