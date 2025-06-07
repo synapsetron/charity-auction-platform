@@ -46,7 +46,7 @@ namespace CharityAuction.Tests.Application.Services
 
             _repositoryMock
                 .Setup(r => r.SaveChangesAsync())
-                .ReturnsAsync(1); // <- fixed here
+                .ReturnsAsync(1); 
 
             // Act
             var result = await _service.CreateNotificationAsync(userId, title, message);
