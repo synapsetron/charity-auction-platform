@@ -6,22 +6,25 @@ namespace CharityAuction.Application.Services
 {
     public class PaymentServiceStrategy : IPaymentServiceStrategy
     {
-        private readonly IEnumerable<IPaymentService> _services;
+        private readonly Dictionary<string, IPaymentService> _serviceMap;
 
         public PaymentServiceStrategy(IEnumerable<IPaymentService> services)
         {
-            _services = services;
+            _serviceMap = services.ToDictionary(
+                s => s.ProviderKey.ToLowerInvariant(),
+                s => s
+            );
         }
 
         private IPaymentService Resolve(string provider)
         {
-            return provider.ToLower() switch
-            {
-                "liqpay" => _services.FirstOrDefault(s => s.GetType().Name.ToLower().Contains("liqpay")),
-                "fondy" => _services.FirstOrDefault(s => s.GetType().Name.ToLower().Contains("fondy")),
-                "stripe" => _services.FirstOrDefault(s => s.GetType().Name.ToLower().Contains("stripe")),
-                _ => throw new NotSupportedException($"Provider '{provider}' is not supported.")
-            } ?? throw new InvalidOperationException($"No implementation found for provider '{provider}'");
+            if (string.IsNullOrWhiteSpace(provider))
+                throw new ArgumentException("Provider must be specified.", nameof(provider));
+
+            if (!_serviceMap.TryGetValue(provider.ToLowerInvariant(), out var service))
+                throw new NotSupportedException($"Provider '{provider}' is not supported.");
+
+            return service;
         }
 
         public Task<string> CreatePaymentAsync(string provider, PaymentRequestDTO request)

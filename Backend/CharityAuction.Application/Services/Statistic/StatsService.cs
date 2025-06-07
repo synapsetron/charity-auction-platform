@@ -1,12 +1,10 @@
-﻿using CharityAuction.Application.DTO.Bid;
-using CharityAuction.Application.DTO.Statistics;
+﻿using CharityAuction.Application.DTO.Statistics;
 using CharityAuction.Application.Interfaces.User;
 using CharityAuction.Application.Interfaces;
 using CharityAuction.Domain.Entities;
 using CharityAuction.Infrastructure.Repositories.Interfaces.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using CharityAuction.Application.Services;
 
 public class StatsService : IStatsService
 {

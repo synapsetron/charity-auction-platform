@@ -18,6 +18,7 @@ public class LiqPayService : IPaymentService
     private readonly LiqPayClient _liqPayClient;
     private readonly LiqPayOptions _settings;
     private readonly IAdminService _adminService;
+    public string ProviderKey => "liqpay";
 
     public LiqPayService(
         ILogger<LiqPayService> logger,

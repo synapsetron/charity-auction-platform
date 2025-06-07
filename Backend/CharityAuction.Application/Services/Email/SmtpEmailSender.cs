@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading;
 using CharityAuction.Infrastructure.Options;
+using CharityAuction.Application.Interfaces;
 
 namespace CharityAuction.Infrastructure.Services
 {
@@ -15,58 +16,46 @@ namespace CharityAuction.Infrastructure.Services
     {
         private readonly EmailSettingsOptions _settings;
         private readonly ILogger<SmtpEmailSender> _logger;
+        private readonly Func<ISmtpClient> _smtpClientFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SmtpEmailSender"/> class.
         /// </summary>
-        public SmtpEmailSender(IOptions<EmailSettingsOptions> settings, ILogger<SmtpEmailSender> logger)
+        public SmtpEmailSender(IOptions<EmailSettingsOptions> settings,
+         ILogger<SmtpEmailSender> logger,
+         Func<ISmtpClient> smtpClientFactory)
         {
-            _settings = settings.Value ?? throw new ArgumentNullException(nameof(settings));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _settings = settings.Value;
+            _logger = logger;
+            _smtpClientFactory = smtpClientFactory;
         }
 
         /// <inheritdoc />
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("Recipient email cannot be null or empty.", nameof(email));
-            if (string.IsNullOrWhiteSpace(subject))
-                throw new ArgumentException("Email subject cannot be null or empty.", nameof(subject));
-            if (string.IsNullOrWhiteSpace(htmlMessage))
-                throw new ArgumentException("Email body cannot be null or empty.", nameof(htmlMessage));
+            if (string.IsNullOrWhiteSpace(email)) throw new ArgumentException("Recipient email is required.", nameof(email));
+            if (string.IsNullOrWhiteSpace(subject)) throw new ArgumentException("Subject is required.", nameof(subject));
+            if (string.IsNullOrWhiteSpace(htmlMessage)) throw new ArgumentException("Message body is required.", nameof(htmlMessage));
+
+            using var smtp = _smtpClientFactory();
+
+            var message = new MailMessage
+            {
+                From = new MailAddress(_settings.SenderEmail, _settings.SenderName),
+                Subject = subject,
+                Body = htmlMessage,
+                IsBodyHtml = true
+            };
+            message.To.Add(email);
 
             try
             {
-                using var mailMessage = new MailMessage
-                {
-                    From = new MailAddress(_settings.SenderEmail, _settings.SenderName),
-                    Subject = subject,
-                    Body = htmlMessage,
-                    IsBodyHtml = true,
-                };
-
-                mailMessage.To.Add(email);
-
-                using var smtpClient = new SmtpClient(_settings.SmtpServer, _settings.Port)
-                {
-                    Credentials = new NetworkCredential(_settings.Username, _settings.Password),
-                    EnableSsl = _settings.UseSSL,
-                    Timeout = 10000 // milliseconds
-                };
-
-                _logger.LogInformation("Sending email to {Email}...", email);
-                await smtpClient.SendMailAsync(mailMessage);
-                _logger.LogInformation("Email successfully sent to {Email}.", email);
-            }
-            catch (SmtpException smtpEx)
-            {
-                _logger.LogError(smtpEx, "SMTP error occurred while sending email to {Email}.", email);
-                throw new InvalidOperationException($"SMTP error: {smtpEx.Message}", smtpEx);
+                await smtp.SendMailAsync(message);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while sending email to {Email}.", email);
-                throw;
+                _logger.LogError(ex, "SMTP error");
+                throw new InvalidOperationException("SMTP error: " + ex.Message, ex);
             }
         }
     }

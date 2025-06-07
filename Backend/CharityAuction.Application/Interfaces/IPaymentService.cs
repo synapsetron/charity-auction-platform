@@ -8,6 +8,10 @@ namespace CharityAuction.Payment.Interfaces
     public interface IPaymentService
     {
         /// <summary>
+        /// Gets the unique key of the payment provider, used to identify the service in configurations and logs.
+        /// </summary>
+        string ProviderKey { get; }
+        /// <summary>
         /// Initiates a new payment using the underlying payment provider.
         /// </summary>
         /// <param name="request">An object containing payment details including user, auction, amount, and description.</param>

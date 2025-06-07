@@ -10,7 +10,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
-namespace CharityAuction.Tests.Application.Services
+namespace CharityAuction.XUnitTest.Services.Payment
 {
     public class LiqPayServiceTests
     {
@@ -72,7 +72,7 @@ namespace CharityAuction.Tests.Application.Services
             {
                 status = "success",
                 order_id = auctionId + "-000000",
-                amount = amount
+                amount
             };
 
             var json = JsonSerializer.Serialize(payload);

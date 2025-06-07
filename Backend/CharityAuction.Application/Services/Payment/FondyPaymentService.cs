@@ -12,6 +12,7 @@ using System.Text;
 
 public class FondyPaymentService : IPaymentService
 {
+    public string ProviderKey => "fondy";
     private readonly FondyPayOptions _options;
     private readonly ILogger<FondyPaymentService> _logger;
     private readonly HttpClient _httpClient;
