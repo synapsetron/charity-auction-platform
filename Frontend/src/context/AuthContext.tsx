@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { UserResponseDTO } from "../types/authTypes";
-import { getCurrentUser, logoutUser } from "../api/auth"; // обязательно подтяни сюда новую функцию
+import { getCurrentUser } from "../api/auth";
 
 interface AuthContextType {
   user: UserResponseDTO | null;
@@ -17,13 +17,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      const wasLoggedIn = localStorage.getItem("was_logged_in");
+      if (wasLoggedIn !== "true") {
+        return;
+      }
+
       try {
         const currentUser = await getCurrentUser();
         setUser(currentUser);
-      } catch (error) {
-        console.error("Не удалось получить пользователя:", error);
-        setUser(null); // если ошибка 401 — обнуляем
-        await logoutUser(); // очищаем куки на всякий случай
+      } catch (error: any) {
+        if (error.response?.status === 401) {
+        } else {
+          console.error("Error via fetching user:", error);
+        }
+        setUser(null);
       }
     };
 

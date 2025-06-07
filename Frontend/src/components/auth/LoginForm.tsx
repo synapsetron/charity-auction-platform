@@ -1,7 +1,7 @@
 import { Form, Button } from 'react-bootstrap';
 import { FaFacebook } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { loginUser, googleLoginUser } from '../../api/auth';
 import { useAuth } from '../../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
@@ -12,7 +12,7 @@ interface LoginFormProps {
 }
 
 const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -20,24 +20,32 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const loggedUser = await loginUser({ email, password });
-      setUser(loggedUser);
+  useEffect(() => {
+    if (user) {
       navigate('/profile/dashboard');
-    } catch (error: any) {
-      const backendMessage = error.response?.data?.message;
-      setErrorMessage(backendMessage || t('login.errors.login'));
     }
-  };
+  }, [user]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const loggedUser = await loginUser({ email, password });
+    setUser(loggedUser);
+
+    setTimeout(() => {
+      navigate('/profile/dashboard', { replace: true });
+    }, 0);
+  } catch (error: any) {
+    const backendMessage = error.response?.data?.message;
+    setErrorMessage(backendMessage || t('login.errors.login'));
+  }
+};
 
   const handleGoogleLoginSuccess = async (credentialResponse: any) => {
     try {
       if (credentialResponse.credential) {
         const loggedUser = await googleLoginUser(credentialResponse.credential);
         setUser(loggedUser);
-        navigate('/profile/dashboard');
       }
     } catch (error: any) {
       const backendMessage = error.response?.data?.message;
@@ -102,7 +110,6 @@ const LoginForm = ({ onForgotPassword }: LoginFormProps) => {
           <GoogleLogin
             onSuccess={handleGoogleLoginSuccess}
             onError={handleGoogleLoginError}
-            useOneTap
           />
         </div>
       </div>

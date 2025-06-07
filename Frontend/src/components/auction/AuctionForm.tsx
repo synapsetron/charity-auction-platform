@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Form, Button, Spinner, Alert } from 'react-bootstrap';
+import { Container, Form, Button, Spinner, Alert, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuction } from '../../hooks/useAuction';
 import { useForm } from '../../hooks/useForm';
@@ -24,6 +24,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isActive, setIsActive] = useState(true);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const { loading, error, fetchAuctionById, createNewAuction, updateExistingAuction } = useAuction();
   const { values, errors, touched, handleChange, handleBlur, validateForm, resetForm } = useForm(
@@ -78,6 +79,7 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
         await createNewAuction(values);
         resetForm();
         setIsActive(true);
+        setShowSuccessModal(true);
         showNotification('success', t('auction_form.notifications.created'));
       }
     } catch (error) {
@@ -196,6 +198,25 @@ const AuctionForm = ({ auctionId, onClose }: AuctionFormProps) => {
           {auctionId ? t('auction_form.update_button') : t('auction_form.create_button')}
         </Button>
       </Form>
+
+      <Modal
+        show={showSuccessModal}
+        onHide={() => setShowSuccessModal(false)}
+        centered
+        backdrop="static"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Успіх!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <p className="mb-3 fs-5">Аукціон успішно створений ✅</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="success" onClick={() => setShowSuccessModal(false)}>
+            Закрити
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

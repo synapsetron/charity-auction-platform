@@ -28,12 +28,14 @@ export const registerUser = async (data: UserRegisterDTO): Promise<UserResponseD
 // Логин пользователя
 export const loginUser = async (data: UserLoginDTO): Promise<UserResponseDTO> => {
   const response = await api.post('/login', data);
+  localStorage.setItem('was_logged_in', 'true');
   return response.data;
 };
 
 // Логин через Google OAuth
 export const googleLoginUser = async (idToken: string): Promise<UserResponseDTO> => {
   const response = await api.post('/login-google', { idToken });
+  localStorage.setItem('was_logged_in', 'true');
   return response.data;
 };
 
@@ -51,6 +53,7 @@ export const updateUserProfile = async (data: UpdateUserProfileDTO): Promise<Use
 
 // Выход из аккаунта
 export const logoutUser = async (): Promise<void> => {
+  localStorage.setItem('was_logged_in', 'false');
   await api.post('/logout');
 };
 

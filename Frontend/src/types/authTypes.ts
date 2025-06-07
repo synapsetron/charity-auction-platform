@@ -34,8 +34,6 @@ export interface UpdateUserProfileDTO {
   newPassword?: string;
 }
 
-// 🔥 Новые типы для сброса пароля, обновления токенов и пр.
-
 export interface ResetPasswordRequestDTO {
   email: string;
 }

@@ -6,6 +6,8 @@ import {
   Spinner,
   Modal,
   Form,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import {
   getPendingAuctions,
@@ -15,6 +17,7 @@ import {
 } from "../../api/adminApi";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { BsExclamationTriangleFill } from "react-icons/bs";
 
 interface Auction {
   id: string;
@@ -25,6 +28,8 @@ interface Auction {
   endTime: string;
   isActive: boolean;
   isApproved: boolean;
+  isFlagged?: boolean;
+  flaggedReason?: string;
 }
 
 const AuctionModeration = () => {
@@ -117,7 +122,23 @@ const AuctionModeration = () => {
         <tbody>
           {auctions.map((auction) => (
             <tr key={auction.id}>
-              <td>{auction.title}</td>
+              <td>
+                {auction.title}
+                {auction.isFlagged && (
+                  <OverlayTrigger
+                    placement="top"
+                    overlay={
+                      <Tooltip id={`tooltip-${auction.id}`}>
+                        Цей аукціон було позначено системою штучного інтелекту як такий, що потенційно містить некоректний або неприйнятний контент.
+                      </Tooltip>
+                    }
+                  >
+                    <span className="ms-2 text-warning" style={{ cursor: "pointer" }}>
+                      <BsExclamationTriangleFill />
+                    </span>
+                  </OverlayTrigger>
+                )}
+              </td>
               <td>{auction.description}</td>
               <td>{new Date(auction.startTime).toLocaleString()}</td>
               <td>{new Date(auction.endTime).toLocaleString()}</td>
@@ -155,32 +176,32 @@ const AuctionModeration = () => {
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>{t("moderation.reject_title")}</Modal.Title>
+          <Modal.Title>{t("admin.moderation.reject_title")}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="rejectReason">
-              <Form.Label>{t("moderation.reject_reason")}</Form.Label>
+              <Form.Label>{t("admin.moderation.reject_reason")}</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
                 value={rejectReason}
                 onChange={(e) => setRejectReason(e.target.value)}
-                placeholder={t("moderation.reject_placeholder") || ""}
+                placeholder={t("admin.moderation.reject_placeholder") || ""}
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowRejectModal(false)}>
-            {t("moderation.cancel")}
+            {t("admin.moderation.cancel")}
           </Button>
           <Button
             variant="warning"
             onClick={handleConfirmReject}
             disabled={!rejectReason.trim()}
           >
-            {t("moderation.reject")}
+            {t("admin.moderation.reject")}
           </Button>
         </Modal.Footer>
       </Modal>

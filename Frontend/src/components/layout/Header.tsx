@@ -1,38 +1,28 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Link, useNavigate } from "react-router-dom";
-import { HubConnectionBuilder, HubConnection } from "@microsoft/signalr";
 import { FaSearch, FaUserCircle, FaBell } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { logoutUser } from "../../api/auth";
 import logo from "../../assets/icons/hammer.png";
 import { useTranslation } from "react-i18next";
-
-type Notification = {
-  title: string;
-  message: string;
-  createdAt: string;
-};
-
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+import { useNotifications } from "../../context/NotificationContext";
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   const { user, setUser } = useAuth();
   const navigate = useNavigate();
-  const connectionRef = useRef<HubConnection | null>(null);
-  const isMounted = useRef(true);
   const { t, i18n } = useTranslation();
 
   const [language, setLanguage] = useState<"ua" | "en">(
     (i18n.language as "ua" | "en") || "ua"
   );
+
+  const { notifications, unreadCount, clearUnread } = useNotifications();
 
   const toggleLanguage = (lang: "ua" | "en") => {
     setLanguage(lang);
@@ -46,69 +36,6 @@ function Header() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    isMounted.current = true;
-
-    const setupNotifications = async () => {
-      if (!user) return;
-
-      try {
-        if (connectionRef.current) {
-          await connectionRef.current.stop();
-          connectionRef.current = null;
-        }
-
-        const newConnection = new HubConnectionBuilder()
-          .withUrl(`${API_URL}/auctionHub`, {
-            withCredentials: true,
-          })
-          .withAutomaticReconnect()
-          .build();
-
-        newConnection.on(
-          "ReceiveNotification",
-          (notification: Notification) => {
-            if (isMounted.current) {
-              setNotifications((prev) => {
-                const alreadyExists = prev.some(
-                  (n) =>
-                    n.title === notification.title &&
-                    n.message === notification.message &&
-                    n.createdAt === notification.createdAt
-                );
-
-                if (!alreadyExists) {
-                  return [...prev, notification];
-                } else {
-                  return prev;
-                }
-              });
-
-              setUnreadCount((prev) => prev + 1);
-            }
-          }
-        );
-
-        await newConnection.start();
-        if (isMounted.current) {
-          connectionRef.current = newConnection;
-        }
-      } catch (error) {
-        console.error("Error connecting to Notification Hub:", error);
-      }
-    };
-
-    setupNotifications();
-
-    return () => {
-      isMounted.current = false;
-      if (connectionRef.current) {
-        connectionRef.current.stop();
-        connectionRef.current = null;
-      }
-    };
-  }, [user]);
 
   const handleLogout = () => {
     logoutUser();
@@ -200,14 +127,7 @@ function Header() {
             />
 
             {user && (
-              <Dropdown
-                align="end"
-                onToggle={(isOpen) => {
-                  if (isOpen) {
-                    setUnreadCount(0);
-                  }
-                }}
-              >
+              <Dropdown align="end" onToggle={(isOpen) => isOpen && clearUnread()}>
                 <Dropdown.Toggle
                   variant="link"
                   id="dropdown-notifications"
@@ -237,9 +157,7 @@ function Header() {
 
                 <Dropdown.Menu style={{ minWidth: "300px" }}>
                   {notifications.length === 0 ? (
-                    <Dropdown.ItemText>
-                      {t("no_notifications")}
-                    </Dropdown.ItemText>
+                    <Dropdown.ItemText>{t("no_notifications")}</Dropdown.ItemText>
                   ) : (
                     notifications.map((n, idx) => (
                       <Dropdown.Item key={idx}>
@@ -260,9 +178,7 @@ function Header() {
                   className="d-flex align-items-center gap-2"
                 >
                   <FaUserCircle size={24} />
-                  <span
-                    className={isScrolled ? "text-dark" : "text-white"}
-                  >
+                  <span className={isScrolled ? "text-dark" : "text-white"}>
                     {user.firstName}
                   </span>
                 </Nav.Link>

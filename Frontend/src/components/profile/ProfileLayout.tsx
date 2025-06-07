@@ -1,4 +1,4 @@
-import { Container, Row, Col, Nav, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Nav, Button, Card, Spinner } from "react-bootstrap";
 import { FaUserCircle } from "react-icons/fa";
 import { MdDashboard, MdOutlineCategory } from "react-icons/md";
 import { CiMedal } from "react-icons/ci";
@@ -9,7 +9,7 @@ import { logoutUser } from "../../api/auth";
 import { useTranslation } from "react-i18next";
 
 const ProfileLayout = () => {
-  const { user, setUser } = useAuth();
+  const { user, setUser} = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -18,7 +18,6 @@ const ProfileLayout = () => {
     setUser(null);
     navigate("/login");
   };
-
   if (!user) {
     return (
       <Container className="py-5">
