@@ -1,15 +1,12 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CharityAuction.Infrastructure.Options
 {
     public class OpenAIOptions
     {
-        [Required]
         public const string SectionName = "OpenAI";
 
-        [Required]
+        [Required(ErrorMessage = "OpenAI ApiKey is required.")]
         public string ApiKey { get; set; } = string.Empty;
     }
 }

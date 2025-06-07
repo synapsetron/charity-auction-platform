@@ -6,23 +6,26 @@ namespace CharityAuction.Infrastructure.Options
     {
         public ValidateOptionsResult Validate(string? name, JwtSettingsOptions options)
         {
-            if (string.IsNullOrEmpty(options.Secret))
-                return ValidateOptionsResult.Fail("JWT Secret ?? ????? ???? ??????.");
+            var failures = new List<string>();
 
-            if (options.AccessTokenExpirationMinutes <= 0)
-                return ValidateOptionsResult.Fail("AccessTokenExpirationMinutes ?????? ???? ?????? 0.");
+            if (string.IsNullOrWhiteSpace(options.Secret))
+                failures.Add("JWT Secret is required.");
 
-            if (options.RefreshTokenExpirationDays <= 0)
-                return ValidateOptionsResult.Fail("RefreshTokenExpirationDays ?????? ???? ?????? 0.");
+            if (options.AccessTokenExpirationMinutes < 1 || options.AccessTokenExpirationMinutes > 1440)
+                failures.Add("AccessTokenExpirationMinutes must be between 1 and 1440.");
 
-            if (string.IsNullOrEmpty(options.Issuer))
-                return ValidateOptionsResult.Fail("JWT Issuer ?? ????? ???? ??????.");
+            if (options.RefreshTokenExpirationDays < 1 || options.RefreshTokenExpirationDays > 365)
+                failures.Add("RefreshTokenExpirationDays must be between 1 and 365.");
 
-            if (string.IsNullOrEmpty(options.Audience))
-                return ValidateOptionsResult.Fail("JWT Audience ?? ????? ???? ??????.");
+            if (string.IsNullOrWhiteSpace(options.Issuer))
+                failures.Add("JWT Issuer is required.");
 
-            return ValidateOptionsResult.Success;
+            if (string.IsNullOrWhiteSpace(options.Audience))
+                failures.Add("JWT Audience is required.");
+
+            return failures.Count == 0
+                ? ValidateOptionsResult.Success
+                : ValidateOptionsResult.Fail(failures);
         }
     }
 }
-

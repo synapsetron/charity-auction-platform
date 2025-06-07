@@ -6,16 +6,18 @@ namespace CharityAuction.Infrastructure.Options
     {
         public const string SectionName = "LiqPay";
 
-        [Required]
+        [Required(ErrorMessage = "LiqPay PublicKey is required.")]
         public string PublicKey { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "LiqPay PrivateKey is required.")]
         public string PrivateKey { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "ResultUrl is required.")]
+        [Url(ErrorMessage = "ResultUrl must be a valid URL.")]
         public string ResultUrl { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "ServerUrl is required.")]
+        [Url(ErrorMessage = "ServerUrl must be a valid URL.")]
         public string ServerUrl { get; set; } = string.Empty;
     }
 }
