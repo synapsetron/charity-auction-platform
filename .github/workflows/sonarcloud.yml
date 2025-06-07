@@ -1,0 +1,64 @@
+name: SonarCloud Analysis
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    name: Build and Analyze
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install global tools
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global dotnet-coverage
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+          echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Restore dependencies
+        run: dotnet restore CharityAuction.sln
+
+      - name: SonarScanner Begin
+        run: |
+          dotnet-sonarscanner begin \
+            /k:"synapsetron_charity-auction-platform" \
+            /o:"synapsetron" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
+
+      - name: Build solution
+        run: dotnet build CharityAuction.sln --no-incremental
+
+      - name: Run tests with coverage
+        run: |
+          dotnet-coverage collect "dotnet test CharityAuction.XUnitTest/CharityAuction.XUnitTest.csproj --no-build" \
+            -f xml -o "coverage.xml"
+
+      - name: Generate HTML report
+        run: |
+          reportgenerator \
+            -reports:coverage.xml \
+            -targetdir:coveragereport \
+            -reporttypes:Html
+
+      - name: Upload HTML report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: coveragereport
+
+      - name: SonarScanner End
+        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
