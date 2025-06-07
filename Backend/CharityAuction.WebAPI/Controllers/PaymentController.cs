@@ -65,7 +65,6 @@ public class PaymentController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Webhook([FromForm] string data, [FromForm] string signature)
     {
-        _logger.LogInformation($"Received raw webhook: data={data}, signature={signature}", data, signature);
         try
         {
             await _paymentStrategy.HandleWebhookAsync("liqpay",data, signature);
