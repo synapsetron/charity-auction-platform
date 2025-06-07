@@ -29,7 +29,7 @@ jobs:
           echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore dependencies
-        run: dotnet restore CharityAuction.sln
+        run: dotnet restore Backend/CharityAuction.sln
 
       - name: SonarScanner Begin
         run: |
@@ -37,28 +37,28 @@ jobs:
             /k:"synapsetron_charity-auction-platform" \
             /o:"synapsetron" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
-            /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
+            /d:sonar.cs.vscoveragexml.reportsPaths="Backend/coverage.xml"
 
       - name: Build solution
-        run: dotnet build CharityAuction.sln --no-incremental
+        run: dotnet build Backend/CharityAuction.sln --no-incremental
 
       - name: Run tests with coverage
         run: |
-          dotnet-coverage collect "dotnet test CharityAuction.XUnitTest/CharityAuction.XUnitTest.csproj --no-build" \
-            -f xml -o "coverage.xml"
+          dotnet-coverage collect "dotnet test Backend/CharityAuction.XUnitTest/CharityAuction.XUnitTest.csproj --no-build" \
+            -f xml -o "Backend/coverage.xml"
 
       - name: Generate HTML report
         run: |
           reportgenerator \
-            -reports:coverage.xml \
-            -targetdir:coveragereport \
+            -reports:Backend/coverage.xml \
+            -targetdir:Backend/coveragereport \
             -reporttypes:Html
 
       - name: Upload HTML report as artifact
         uses: actions/upload-artifact@v4
         with:
           name: coverage-html
-          path: coveragereport
+          path: Backend/coveragereport
 
       - name: SonarScanner End
         run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
