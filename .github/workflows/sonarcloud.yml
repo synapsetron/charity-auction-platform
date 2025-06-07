@@ -38,8 +38,8 @@ jobs:
             /o:"synapsetron" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.cs.vscoveragexml.reportsPaths="Backend/coverage.xml" \
-            /d:sonar.coverage.exclusions="**/Migrations/**,Frontend/**"
-
+            /d:sonar.coverage.exclusions="**/Migrations/**,Frontend/**" \
+            /d:sonar.exclusions="**/coveragereport/**"
 
       - name: Build solution
         run: dotnet build Backend/CharityAuction.sln --no-incremental
@@ -49,12 +49,16 @@ jobs:
           dotnet-coverage collect "dotnet test Backend/CharityAuction.XUnitTest/CharityAuction.XUnitTest.csproj --no-build" \
             -f xml -o "Backend/coverage.xml"
 
+      - name: Clean previous coverage report
+        run: rm -rf Backend/coveragereport
+
       - name: Generate HTML report
         run: |
           reportgenerator \
             -reports:Backend/coverage.xml \
             -targetdir:Backend/coveragereport \
             -reporttypes:Html
+
 
       - name: Upload HTML report as artifact
         uses: actions/upload-artifact@v4
