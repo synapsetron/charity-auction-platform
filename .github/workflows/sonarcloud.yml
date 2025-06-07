@@ -38,7 +38,8 @@ jobs:
             /o:"synapsetron" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.cs.vscoveragexml.reportsPaths="Backend/coverage.xml" \
-            /d:sonar.exclusions="**/Migrations/**"
+            /d:sonar.coverage.exclusions="**/Migrations/**,Frontend/**"
+
 
       - name: Build solution
         run: dotnet build Backend/CharityAuction.sln --no-incremental
