@@ -28,6 +28,7 @@
     <ProjectReference Include="..\CharityAuction.Application\CharityAuction.Application.csproj" />
     <ProjectReference Include="..\CharityAuction.Domain\CharityAuction.Domain.csproj" />
     <ProjectReference Include="..\CharityAuction.Infrastructure\CharityAuction.Infrastructure.csproj" />
+    <ProjectReference Include="..\CharityAuction.WebAPI\CharityAuction.WebAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,9 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="DTO\" />
-    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>
