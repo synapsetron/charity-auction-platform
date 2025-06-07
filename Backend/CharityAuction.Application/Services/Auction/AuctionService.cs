@@ -21,6 +21,7 @@ namespace CharityAuction.Application.Services
         private readonly ICurrentUserService _currentUserService;
         private readonly IMapper _mapper;
         private readonly ILogger<AuctionService> _logger;
+        private readonly IContentModerationService _moderationService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuctionService"/> class.
@@ -29,12 +30,14 @@ namespace CharityAuction.Application.Services
             IRepositoryWrapper repository,
             ICurrentUserService currentUserService,
             IMapper mapper,
-            ILogger<AuctionService> logger)
+            ILogger<AuctionService> logger,
+            IContentModerationService _moderationService)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _currentUserService = currentUserService ?? throw new ArgumentNullException(nameof(currentUserService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _moderationService = _moderationService ?? throw new ArgumentNullException(nameof(_moderationService));
         }
 
         #region Create & Update
@@ -57,6 +60,12 @@ namespace CharityAuction.Application.Services
             auction.CreatedAt = DateTime.UtcNow;
             auction.IsActive = false;
             auction.IsApproved = false;
+
+            string combinedText = $"{auction.Title} {auction.Description}";
+            var (isFlagged, reason) = await _moderationService.IsContentFlaggedAsync(combinedText);
+            auction.IsFlagged = isFlagged;
+            auction.FlaggedReason = reason;
+
 
             await _repository.AuctionRepository.CreateAsync(auction);
             await _repository.SaveChangesAsync();

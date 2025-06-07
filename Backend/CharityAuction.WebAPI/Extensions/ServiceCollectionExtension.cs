@@ -80,13 +80,14 @@ namespace CharityAuction.WebAPI.Extensions
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Local";
 
             services.AddHttpClient();
-
             services.Configure<ConnectionStringsOptions>(configuration.GetSection(ConnectionStringsOptions.SectionName));
             services.Configure<JwtSettingsOptions>(configuration.GetSection(JwtSettingsOptions.SectionName));
             services.Configure<EmailSettingsOptions>(configuration.GetSection(EmailSettingsOptions.SectionName));
             services.Configure<LiqPayOptions> (configuration.GetSection(LiqPayOptions.SectionName));
             services.Configure<FondyPayOptions>(configuration.GetSection(FondyPayOptions.SectionName));
+            services.Configure<OpenAIOptions>(configuration.GetSection(OpenAIOptions.SectionName));
 
+            services.AddHttpClient<IContentModerationService, OpenAiModerationService>();
             services.AddDbContext<ApplicationDbContext>((provider, options) =>
             {
                 var dbOptions = provider.GetRequiredService<IOptionsSnapshot<ConnectionStringsOptions>>().Value;

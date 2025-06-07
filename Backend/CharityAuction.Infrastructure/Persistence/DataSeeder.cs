@@ -192,7 +192,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -205,7 +207,7 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
                 },
                 new Auction
                 {
@@ -218,7 +220,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -231,7 +235,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -244,7 +250,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -257,7 +265,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -270,7 +280,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -283,7 +295,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -296,7 +310,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 },
                 new Auction
                 {
@@ -309,7 +325,9 @@ namespace CharityAuction.Infrastructure.Persistence
                     StartTime = now,
                     EndTime = now.AddDays(7),
                     IsActive = true,
-                    CreatedAt = now
+                    CreatedAt = now,
+                    IsFlagged = false,
+                    FlaggedReason = null
                 }
             };
 

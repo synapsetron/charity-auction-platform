@@ -48,5 +48,8 @@ namespace CharityAuction.Domain.Entities
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsFlagged { get; set; } = false;
+        public string? FlaggedReason { get; set; }
     }
 }

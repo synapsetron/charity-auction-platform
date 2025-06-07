@@ -99,10 +99,22 @@ const MyProducts = () => {
                     }}
                   />
                 </td>
-                <td>{auction.isApproved ? t("my_products.table.yes") : t("my_products.table.no")}</td>
-                <td>{auction.isSold ? t("my_products.table.yes") : t("my_products.table.no")}</td>
                 <td>
-                  {auction.isActive ? (
+                  {auction.isApproved
+                    ? t("my_products.table.yes")
+                    : t("my_products.table.no")}
+                </td>
+                <td>
+                  {auction.isSold
+                    ? t("my_products.table.yes")
+                    : t("my_products.table.no")}
+                </td>
+                <td>
+                  {!auction.isApproved ? (
+                    <span className="text-warning fw-semibold">
+                      {t("my_products.table.pending")}
+                    </span>
+                  ) : auction.isActive ? (
                     <span className="text-success fw-semibold">
                       {t("my_products.table.active")}
                     </span>

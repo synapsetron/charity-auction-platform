@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CharityAuction.Application.Services.Admin
 {
@@ -70,7 +71,6 @@ namespace CharityAuction.Application.Services.Admin
             }
 
             _logger.LogInformation("Successfully fetched {Count} pending auctions.", auctionDtos.Count());
-
             return auctionDtos;
         }
 

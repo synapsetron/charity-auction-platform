@@ -14,5 +14,8 @@
         public DateTime CreatedAt { get; set; }
         public bool IsApproved { get; set; }
         public bool isSold { get; set; } = false;
+
+        public bool IsFlagged { get; set; } = false;
+        public string? FlaggedReason { get; set; }
     }
 }

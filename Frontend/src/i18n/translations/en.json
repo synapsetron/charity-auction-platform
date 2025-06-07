@@ -287,6 +287,7 @@
     "error": "Failed to load auctions.",
     "table": {
       "sn": "S.N",
+      "pending": "Waiting for Approval",
       "title": "Title",
       "fee": "Commission",
       "start_price": "Starting Price",
