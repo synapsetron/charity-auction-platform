@@ -69,7 +69,8 @@ public class GoogleAuthService : IGoogleAuthService
             Email = user.Email,
             PhotoUrl = user.PhotoUrl,
             AccessToken = accessToken,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            Role  = user.Role
         };
     }
 }

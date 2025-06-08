@@ -31,13 +31,13 @@ namespace CharityAuction.Application.Services
             ICurrentUserService currentUserService,
             IMapper mapper,
             ILogger<AuctionService> logger,
-            IContentModerationService _moderationService)
+            IContentModerationService moderationService)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _currentUserService = currentUserService ?? throw new ArgumentNullException(nameof(currentUserService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _moderationService = _moderationService ?? throw new ArgumentNullException(nameof(_moderationService));
+            _moderationService = moderationService ?? throw new ArgumentNullException(nameof(_moderationService));
         }
 
         #region Create & Update

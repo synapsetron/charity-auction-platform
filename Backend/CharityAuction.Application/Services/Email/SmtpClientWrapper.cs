@@ -2,6 +2,7 @@
 using CharityAuction.Infrastructure.Options;
 using System.Net.Mail;
 using System.Net;
+using Microsoft.Extensions.Options;
 
 
 namespace CharityAuction.Application.Services.Email
@@ -10,8 +11,9 @@ namespace CharityAuction.Application.Services.Email
     {
         private readonly SmtpClient _smtp;
 
-        public SmtpClientWrapper(EmailSettingsOptions settings)
+        public SmtpClientWrapper(IOptions<EmailSettingsOptions> options)
         {
+            var settings = options.Value;
             _smtp = new SmtpClient(settings.SmtpServer, settings.Port)
             {
                 Credentials = new NetworkCredential(settings.Username, settings.Password),

@@ -32,6 +32,7 @@ using CharityAuction.SignalR.Services;
 using CharityAuction.Application.Interfaces.Admin;
 using CharityAuction.Application.Services.Admin;
 using CharityAuction.Payment.Interfaces;
+using CharityAuction.Application.Services.Email;
 
 
 namespace CharityAuction.WebAPI.Extensions
@@ -56,6 +57,7 @@ namespace CharityAuction.WebAPI.Extensions
             services.AddScoped<ICurrentUserService, CurrentUserService>();
             services.AddScoped<IUserService,  UserService>();
             services.AddScoped<IEmailSender, SmtpEmailSender>();
+
             services.AddScoped<IGoogleAuthService, GoogleAuthService>();
             services.AddScoped<IAuctionService,AuctionService>();
             services.AddScoped<IAuctionClosingService, AuctionClosingService>();
@@ -68,6 +70,12 @@ namespace CharityAuction.WebAPI.Extensions
             services.AddScoped<IPaymentService, FondyPaymentService>();
             services.AddScoped<IPaymentService, LiqPayService>();
             services.AddScoped<IPaymentServiceStrategy, PaymentServiceStrategy>();
+            services.AddScoped<IGoogleTokenValidator, GoogleTokenValidator>();
+            services.AddScoped<ISmtpClient, SmtpClientWrapper>();
+            services.AddScoped<Func<ISmtpClient>>(sp => () => sp.GetRequiredService<ISmtpClient>());
+
+            // services.AddHttpClient<IContentModerationService, OpenAiModerationService>();
+            services.AddHttpClient<IContentModerationService, PerspectiveModerationService>();
             var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
             services.AddAutoMapper(currentAssemblies);
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(currentAssemblies));
@@ -85,9 +93,10 @@ namespace CharityAuction.WebAPI.Extensions
             services.Configure<EmailSettingsOptions>(configuration.GetSection(EmailSettingsOptions.SectionName));
             services.Configure<LiqPayOptions> (configuration.GetSection(LiqPayOptions.SectionName));
             services.Configure<FondyPayOptions>(configuration.GetSection(FondyPayOptions.SectionName));
-            services.Configure<OpenAIOptions>(configuration.GetSection(OpenAIOptions.SectionName));
+            // services.Configure<OpenAIOptions>(configuration.GetSection(OpenAIOptions.SectionName));
+            
 
-            services.AddHttpClient<IContentModerationService, OpenAiModerationService>();
+            services.Configure<PerspectiveApiOptions>(configuration.GetSection(PerspectiveApiOptions.SectionName));
             services.AddDbContext<ApplicationDbContext>((provider, options) =>
             {
                 var dbOptions = provider.GetRequiredService<IOptionsSnapshot<ConnectionStringsOptions>>().Value;
