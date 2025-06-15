@@ -69,13 +69,13 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ auction }) => {
           <div className="d-flex justify-content-around text-center mb-3">
             <div>
               <FaGavel className="text-success mb-1" />
-              <div className="fw-bold text-success">${currentBid.toFixed(2)}</div>
+              <div className="fw-bold text-success">{currentBid.toFixed(2)} UAH</div>
               <small className="text-muted">{t("auction_card.current_bid")}</small>
             </div>
             <div className="border-start" style={{ height: "50px" }}></div>
             <div>
               <FaMoneyBillWave className="text-danger mb-1" />
-              <div className="fw-bold text-danger">${buyNowPrice.toFixed(2)}</div>
+              <div className="fw-bold text-danger">{buyNowPrice.toFixed(2)} UAH</div>
               <small className="text-muted">{t("auction_card.buy_now")}</small>
             </div>
           </div>

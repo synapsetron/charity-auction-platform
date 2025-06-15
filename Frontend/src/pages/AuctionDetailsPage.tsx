@@ -137,14 +137,14 @@ const AuctionDetailsPage = () => {
   const totalRaised = auction.bids.reduce((sum, bid) => sum + bid.amount, 0);
 
   const handleBidSubmit = () => {
-    toast.info(`Submitting bid: $${bidAmount}`, { position: "top-center" });
+    toast.info(`Submitting bid: UAN ${bidAmount}`, { position: "top-center" });
   };
 
   const handleDonateBid = async () => {
     if (!userBid) return;
     try {
       await donateBid(userBid.id);
-      toast.success(`Thank you for donating your bid of $${userBid.amount}!`, {
+      toast.success(`Thank you for donating your bid of UAN ${userBid.amount}!`, {
         position: "top-center",
       });
       setAuction((prev) => {
@@ -280,12 +280,12 @@ const AuctionDetailsPage = () => {
             <div>
               <span className="text-muted">{t("auctiondetails.price")}</span>
               <span className="fw-bold text-primary ms-2">
-                ${auction.startingPrice}
+                {auction.startingPrice} UAH
               </span>
             </div>
             <div>
               <span className="text-muted">{t("auctiondetails.current_bid")}</span>
-              <span className="fw-bold text-success ms-2">${currentBid}</span>
+              <span className="fw-bold text-success ms-2">UAH {currentBid}</span>
             </div>
           </div>
 
@@ -382,7 +382,7 @@ const AuctionDetailsPage = () => {
                 <thead>
                   <tr>
                     <th>Date</th>
-                    <th>Bid Amount (USD)</th>
+                    <th>Bid Amount (UAH)</th>
                     <th>User</th>
                   </tr>
                 </thead>
@@ -396,7 +396,7 @@ const AuctionDetailsPage = () => {
                     .map((bid) => (
                       <tr key={bid.id}>
                         <td>{new Date(bid.createdAt).toLocaleDateString()}</td>
-                        <td>${bid.amount}</td>
+                        <td>UAH {bid.amount}</td>
                         <td>{bid.userName ?? "Unknown"}</td>
                       </tr>
                     ))}
