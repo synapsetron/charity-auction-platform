@@ -1,14 +1,3 @@
-
-Web platform for charity auctions to support the Armed Forces of Ukraine. Built with ASP.NET Core and React.
-
-## 📊 Code Quality & Coverage
-
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=ncloc&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=coverage&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=bugs&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=vulnerabilities&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=security_rating&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
-
 # 🎯 Charity Auction Platform
 
 [![.NET](https://img.shields.io/badge/.NET-9.0-blue.svg)](https://dotnet.microsoft.com/download)
@@ -17,6 +6,14 @@ Web platform for charity auctions to support the Armed Forces of Ukraine. Built 
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Latest-green.svg)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-3.8-blue.svg)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+
+# 📊 Code Quality & Coverage
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=ncloc&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=coverage&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=bugs&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=vulnerabilities&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=synapsetron_charity-auction-platform&metric=security_rating&token=759f83b4461d5e7f72f0f061991ec4f61382b60d)](https://sonarcloud.io/summary/new_code?id=synapsetron_charity-auction-platform)
 
 A modern, full-stack charity auction platform built with **ASP.NET Core 9.0** and **React 19**. This platform enables users to create, participate in, and manage charity auctions with real-time bidding, payment processing, and comprehensive admin controls.
 
