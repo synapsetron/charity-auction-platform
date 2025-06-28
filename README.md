@@ -30,6 +30,56 @@ A modern, full-stack charity auction platform built with **ASP.NET Core 9.0** an
 - **📈 Analytics** - Detailed statistics and reporting
 - **🔄 Background Jobs** - Automated auction closing with Hangfire
 
+
+
+## 🖼️ Screenshots
+
+<details>
+  <summary>Click to expand screenshots 📸</summary>
+
+  <br/>
+
+  #### 🏠 Main Page  
+  ![](./Screenshots/mainpage.png)
+
+  #### 🔐 Login Page  
+  ![](./Screenshots/loginpage.png)
+
+  #### 🧾 About Page  
+  ![](./Screenshots/aboutpage.png)
+
+  #### 📞 Contact Page  
+  ![](./Screenshots/contactpage.png)
+
+  #### 🗂️ Services Page  
+  ![](./Screenshots/servicespage.png)
+
+  #### 📰 Blog Page  
+  ![](./Screenshots/blogpage.png)
+
+  #### 👤 User Account Page  
+  ![](./Screenshots/useraccountpage.png)
+
+  #### 💸 User Bids Page  
+  ![](./Screenshots/userbidspage.png)
+
+  #### 📋 Auction List Page  
+  ![](./Screenshots/auctionlistpage.png)
+
+  #### 🛠️ Auction Creation Page  
+  ![](./Screenshots/auctioncreationpage.png)
+
+  #### 🎯 Auction Details Page  
+  ![](./Screenshots/auctionpage.png)
+
+  #### 👮 Admin Moderation Page  
+  ![](./Screenshots/adminmoderationpage.png)
+
+  #### 👤 Admin Account Page  
+  ![](./Screenshots/adminaccountpage.png)
+
+</details>
+
 ## 🛠️ Technology Stack
 
 ### Backend
